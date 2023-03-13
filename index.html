@@ -4,6 +4,7 @@
 <head>
   <title>QR Code Scanner</title>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@zxing/library@0.16.0/umd/index.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <style>
     body {
       background: url(https://cdn.pixabay.com/photo/2018/01/09/20/24/wood-3072434_960_720.jpg);
@@ -68,6 +69,25 @@
     } else if (document.body.getBoundingClientRect().height = document.body.getBoundingClientRect().width) {
       document.getElementById('preview').style.height = '80vh';
       document.getElementById('preview').style.width = '80vw';
+    }
+   if (allowedValues.includes(result.text)) {
+      const userInput = prompt("Please enter your group passkey: ");
+      if (password.includes(userInput)) {
+        $.ajax({
+          type: 'POST',
+          url: '/submit',
+          data: JSON.stringify({ passkey: userInput, qrValue: result.text }),
+          contentType: 'application/json',
+          success: function(response) {
+            console.log(response);
+            document.getElementById('preview').style.display = 'none';
+            document.getElementById('output').innerHTML = result.text;
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });
+      }
     }
 
     codeReader.getVideoInputDevices().then(videoInputDevices => {
