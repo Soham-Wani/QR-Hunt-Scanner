@@ -3,6 +3,8 @@
 <head>
   <title>QR Code Scanner</title>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@zxing/library@0.16.0/umd/index.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
   <style>
     body {
       background: url(https://cdn.pixabay.com/photo/2018/01/09/20/24/wood-3072434_960_720.jpg);
@@ -53,6 +55,17 @@
   </div>
   <div id="output"></div>
   <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA1sy05k4XhbHYxCqL1UKN_AuGwAmnOA2A",
+      authDomain: "qr-hunt-1.firebaseapp.com",
+      databaseURL: "https://qr-hunt-1-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "qr-hunt-1",
+      storageBucket: "qr-hunt-1.appspot.com",
+      messagingSenderId: "809676584252",
+      appId: "1:809676584252:web:fc9412bb864fe79a071a39"
+    };
+    firebase.initializeApp(firebaseConfig);
+    var database = firebase.database().ref('scans');
     const codeReader = new ZXing.BrowserQRCodeReader();
     const password = ['pass1', 'pass2', 'pass3', 'pass4', 'pass5', 'pass6', 'pass7', 'pass8', 'pass9', 'pass10', 'pass11', 'pass12'];
     const allowedValues = ['http://en.m.wikipedia.org', '1q1', '1q2', '1q3', '1q4', '1q5', '1q6', '2q1', '2q2', '2q3', '2q4', '3q1', '3q2', '4q1p10', '4q2p10', '4q3p10', '4q4p10', '4q5p10', '4q6p10', '4q7p10', '4q8p10', '4q9p10', '4q10p10', '4q11p10', '4q12p10', '4q13p10', '4q14p10', '4q15p10', '4q16p10', '4q17p10', '4q18p10', '4q19p10', '4q20p10', '4q21p15', '4q22p15', '4q23p15', '4q24p15', '4q25p15', '4q26p15', '4q27p15', '4q28p15', '4q29p15', '4q30p15', '4q31p20', '4q32p20', '4q33p20', '4q34p20', '4q35p20', '4q36p20', '4q37p20', '4q38p20', '4q39p20', '4q40p20', '4q41p25', '4q42p25', '4q43p25', '4q44p25', '4q45p25', '4q46p30', '4q47p30', '4q48p30', '4q49p30', '4q50p30'];
@@ -87,6 +100,12 @@
             const userInput = prompt("Please enter your group passkey: ");
 
             if (password.includes(userInput)) {
+              database.set({
+                scan1: {
+                  passkey: userInput,
+                  qr: result.text
+                }
+              });
               // document.getElementById('output').innerHTML = result.text;
               document.getElementById('preview').style.display = 'none';
               if ((userInput == password[0]) && result.text == allowedValues[0]) {
@@ -98,6 +117,7 @@
                 window.location.reload();
               }
             }
+
           } else {
             if (!window.alert("Detected QR is not a part of this QR hunt.")) {
               window.location.reload();
