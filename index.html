@@ -98,15 +98,23 @@
         .then(result => {
           if (allowedValues.includes(result.text)) {
             const userInput = prompt("Please enter your group passkey: ");
+            const resulttosave = result.text;
 
             if (password.includes(userInput)) {
-              database.set({
-                scan1: {
-                  passkey: userInput,
-                  qr: result.text
+              database.child(resulttosave).once('value').then(function (snapshot) {
+                if (snapshot.exists()) {
+                  var savedpasskey = snapshot.val().passkey;
+                  if (savedpasskey === userInput) {
+                    // show clue
+                  } else {
+                    alert("You are late. \nReport to staff. You have been eliminated.");
+                  }
+                } else {
+                  database.child(resulttosave).set({
+                    passkey: userInput
+                  });
                 }
               });
-              // document.getElementById('output').innerHTML = result.text;
               document.getElementById('preview').style.display = 'none';
               if ((userInput == password[0]) && result.text == allowedValues[0]) {
                 document.getElementById('output').innerHTML = 'Clue 1 (Co-ords 1)';
