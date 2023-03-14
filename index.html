@@ -1,5 +1,4 @@
 <html>
-<!-- Code not complete, do not judge -->
 <!-- https://console.firebase.google.com/project/qr-hunt-1/database/qr-hunt-1-default-rtdb/data/~2F -->
 
 <head>
@@ -103,7 +102,6 @@
             const userInput = prompt("Please enter your group passkey: ");
             const resulttosave = result.text;
             const index = round1.indexOf(resulttosave);
-            console.log(index, resulttosave);
             const allowedindex1 = index * 2;
             const allowedindex2 = (index * 2) + 1;
             if (password.includes(userInput)) {
@@ -136,6 +134,8 @@
                       document.getElementById('output').style.display = 'flex';
                     } else {
                       alert("You are late. \nReport to staff. You have been eliminated.");
+                      document.getElementById('preview').style.display = 'none';
+                      // js html div for ty
                     }
                   } else {
                     database.child(resulttosave).set({
@@ -178,10 +178,18 @@
             }
           } else if (round2.includes(result.text)) {
             var database = firebase.database().ref('round2db');
+            firebase.database().ref('round1db').once('value').then(snapshot => {
+              snapshot.forEach(childSnapshot => {
+                const round1pass = childSnapshot.child("passkey").val();
+                round1teams.push(round1pass);
+              });
+              console.log(round1teams);
+            }).catch(function (error) {
+              console.error('Error retrieving data from Firebase: ', error);
+            });
             const userInput = prompt("Please enter your group passkey: ");
             const resulttosave = result.text;
-            const index = round1.indexOf(resulttosave);
-            console.log(index, resulttosave);
+            const index = round2.indexOf(resulttosave);
             const allowedindex1 = index * 2;
             const allowedindex2 = (index * 2) + 1;
             if (password.includes(userInput)) {
@@ -204,21 +212,17 @@
                         case 3:
                           document.getElementById('output').innerHTML = 'Clue 4';
                           break;
-                        case 4:
-                          document.getElementById('output').innerHTML = 'Clue 5';
-                          break;
-                        case 5:
-                          document.getElementById('output').innerHTML = 'Clue 6';
-                          break;
                       }
                       document.getElementById('output').style.display = 'flex';
                     } else {
                       alert("You are late. \nReport to staff. You have been eliminated.");
+                      document.getElementById('preview').style.display = 'none';
+                      // js html div for ty
                     }
                   } else {
                     database.child(resulttosave).set({
                       passkey: userInput,
-                      time: (new Date(Date.now() * 1000)).toLocaleString()
+                      time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
                     });
                     document.getElementById('preview').style.display = 'none';
                     switch (index) {
@@ -233,12 +237,6 @@
                         break;
                       case 3:
                         document.getElementById('output').innerHTML = 'Clue 4';
-                        break;
-                      case 4:
-                        document.getElementById('output').innerHTML = 'Clue 5';
-                        break;
-                      case 5:
-                        document.getElementById('output').innerHTML = 'Clue 6';
                         break;
                     }
                     document.getElementById('output').style.display = 'flex';
