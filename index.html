@@ -69,8 +69,11 @@
     var database = firebase.database().ref('scans');
     const codeReader = new ZXing.BrowserQRCodeReader();
     const password = ['pass1', 'pass2', 'pass3', 'pass4', 'pass5', 'pass6', 'pass7', 'pass8', 'pass9', 'pass10', 'pass11', 'pass12'];
-    const allowedValues = ['1q1', '1q2', '1q3', '1q4', '1q5', '1q6', '2q1', '2q2', '2q3', '2q4', '3q1', '3q2', '4q1p10', '4q2p10', '4q3p10', '4q4p10', '4q5p10', '4q6p10', '4q7p10', '4q8p10', '4q9p10', '4q10p10', '4q11p10', '4q12p10', '4q13p10', '4q14p10', '4q15p10', '4q16p10', '4q17p10', '4q18p10', '4q19p10', '4q20p10', '4q21p15', '4q22p15', '4q23p15', '4q24p15', '4q25p15', '4q26p15', '4q27p15', '4q28p15', '4q29p15', '4q30p15', '4q31p20', '4q32p20', '4q33p20', '4q34p20', '4q35p20', '4q36p20', '4q37p20', '4q38p20', '4q39p20', '4q40p20', '4q41p25', '4q42p25', '4q43p25', '4q44p25', '4q45p25', '4q46p30', '4q47p30', '4q48p30', '4q49p30', '4q50p30'];
-    // For allowedValues of QR, in 4th (final) level, 20 QRs of 10 points, 10 QRs of 15 points, 10 QRs of 20 points, 5 QRs of 25 points, 5 QRs of 30 points
+    const round1 = ['1q1', '1q2', '1q3', '1q4', '1q5', '1q6']
+    const round2 = ['2q1', '2q2', '2q3', '2q4']
+    const round3 = ['3q1', '3q2']
+    const round4 = ['4q1p10', '4q2p10', '4q3p10', '4q4p10', '4q5p10', '4q6p10', '4q7p10', '4q8p10', '4q9p10', '4q10p10', '4q11p10', '4q12p10', '4q13p10', '4q14p10', '4q15p10', '4q16p10', '4q17p10', '4q18p10', '4q19p10', '4q20p10', '4q21p15', '4q22p15', '4q23p15', '4q24p15', '4q25p15', '4q26p15', '4q27p15', '4q28p15', '4q29p15', '4q30p15', '4q31p20', '4q32p20', '4q33p20', '4q34p20', '4q35p20', '4q36p20', '4q37p20', '4q38p20', '4q39p20', '4q40p20', '4q41p25', '4q42p25', '4q43p25', '4q44p25', '4q45p25', '4q46p30', '4q47p30', '4q48p30', '4q49p30', '4q50p30'];
+    // For round1 of QR, in 4th (final) level, 20 QRs of 10 points, 10 QRs of 15 points, 10 QRs of 20 points, 5 QRs of 25 points, 5 QRs of 30 points
 
     if (document.body.getBoundingClientRect().height > document.body.getBoundingClientRect().width) {
       document.getElementById('preview').style.maxHeight = '80vh';
@@ -97,10 +100,10 @@
 
       codeReader.decodeFromInputVideoDevice(deviceId, 'preview')
         .then(result => {
-          if (allowedValues.includes(result.text)) {
+          if (round1.includes(result.text)) {
             const userInput = prompt("Please enter your group passkey: ");
             const resulttosave = result.text;
-            const index = allowedValues.indexOf(resulttosave);
+            const index = round1.indexOf(resulttosave);
             const allowedindex1 = index * 2;
             const allowedindex2 = (index * 2) + 1;
 
@@ -110,27 +113,68 @@
                   if (snapshot.exists()) {
                     var savedpasskey = snapshot.val().passkey;
                     if (savedpasskey === userInput) {
-                      // show clue
-                      document.getElementById('output').innerHTML = 'Clue 1';
+                      document.getElementById('preview').style.display = 'none';
+                      switch (index) {
+                        case 1:
+                          document.getElementById('output').innerHTML = 'Clue 1';
+                          break;
+                        case 2:
+                          document.getElementById('output').innerHTML = 'Clue 2';
+                          break;
+                        case 3:
+                          document.getElementById('output').innerHTML = 'Clue 3';
+                          break;
+                        case 4:
+                          document.getElementById('output').innerHTML = 'Clue 4';
+                          break;
+                        case 5:
+                          document.getElementById('output').innerHTML = 'Clue 5';
+                          break;
+                        case 6:
+                          document.getElementById('output').innerHTML = 'Clue 6';
+                          break;
+                      }
                     } else {
                       alert("You are late. \nReport to staff. You have been eliminated.");
                     }
                   } else {
                     database.child(resulttosave).set({
-                      passkey: userInput
+                      passkey: userInput,
+                      time: Date.now()
                     });
+                    document.getElementById('preview').style.display = 'none';
+                    switch (index) {
+                      case 1:
+                        document.getElementById('output').innerHTML = 'Clue 1';
+                        break;
+                      case 2:
+                        document.getElementById('output').innerHTML = 'Clue 2';
+                        break;
+                      case 3:
+                        document.getElementById('output').innerHTML = 'Clue 3';
+                        break;
+                      case 4:
+                        document.getElementById('output').innerHTML = 'Clue 4';
+                        break;
+                      case 5:
+                        document.getElementById('output').innerHTML = 'Clue 5';
+                        break;
+                      case 6:
+                        document.getElementById('output').innerHTML = 'Clue 6';
+                        break;
+                    }
                   }
                 });
               } else {
                 if (!window.alert("This isnt't your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
                   window.location.reload();
                 }
-              }
+              } /*
               document.getElementById('preview').style.display = 'none';
-              if ((userInput == password[0]) && result.text == allowedValues[0]) {
+              if ((userInput == password[0]) && result.text == round1[0]) {
                 document.getElementById('output').innerHTML = 'Clue 1 (Co-ords 1)';
               }
-              document.getElementById('output').style.display = 'flex';
+              document.getElementById('output').style.display = 'flex'; */
             } else {
               if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
                 window.location.reload();
