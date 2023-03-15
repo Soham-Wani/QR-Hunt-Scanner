@@ -69,7 +69,8 @@
     const codeReader = new ZXing.BrowserQRCodeReader();
     const password = ['pass1', 'pass2', 'pass3', 'pass4', 'pass5', 'pass6', 'pass7', 'pass8', 'pass9', 'pass10', 'pass11', 'pass12'];
     const round1 = ['1q1', '1q2', '1q3', '1q4', '1q5', '1q6'];
-    const round1teams = []; // 6 + 2
+    const round1teams = ['pass13', 'pass14'];
+    const round1teamssplice = []; // 6 + 2
     const round2 = ['2q1', '2q2', '2q3', '2q4'];
     const round2teams = []; // 4
     const round3 = ['3q1', '3q2'];
@@ -133,7 +134,7 @@
                       }
                       document.getElementById('output').style.display = 'flex';
                     } else {
-                      alert("You are late. \nReport to staff. You have been eliminated.");
+                      alert("You are late. \nReport to staff. Your team has been eliminated.");
                       document.getElementById('preview').style.display = 'none';
                       // js html div for ty
                     }
@@ -179,80 +180,191 @@
           } else if (round2.includes(result.text)) {
             var database = firebase.database().ref('round2db');
             firebase.database().ref('round1db').once('value').then(snapshot => {
-              snapshot.forEach(childSnapshot => {
-                const round1pass = childSnapshot.child("passkey").val();
-                round1teams.push(round1pass);
-              });
-              console.log(round1teams);
-            }).catch(function (error) {
-              console.error('Error retrieving data from Firebase: ', error);
-            });
-            const userInput = prompt("Please enter your group passkey: ");
-            const resulttosave = result.text;
-            const index = round2.indexOf(resulttosave);
-            const allowedindex1 = index * 2;
-            const allowedindex2 = (index * 2) + 1;
-            if (round1teams.includes(userInput)) {
-              if (userInput == round1teams[allowedindex1] || userInput == round1teams[allowedindex2]) {
-                database.child(resulttosave).once('value').then(function (snapshot) {
-                  if (snapshot.exists()) {
-                    var savedpasskey = snapshot.val().passkey;
-                    if (savedpasskey === userInput) {
-                      document.getElementById('preview').style.display = 'none';
-                      switch (index) {
-                        case 0:
-                          document.getElementById('output').innerHTML = 'Clue 1';
-                          break;
-                        case 1:
-                          document.getElementById('output').innerHTML = 'Clue 2';
-                          break;
-                        case 2:
-                          document.getElementById('output').innerHTML = 'Clue 3';
-                          break;
-                        case 3:
-                          document.getElementById('output').innerHTML = 'Clue 4';
-                          break;
-                      }
-                      document.getElementById('output').style.display = 'flex';
-                    } else {
-                      alert("You are late. \nReport to staff. You have been eliminated.");
-                      document.getElementById('preview').style.display = 'none';
-                      // js html div for ty
-                    }
-                  } else {
-                    database.child(resulttosave).set({
-                      passkey: userInput,
-                      time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
-                    });
-                    document.getElementById('preview').style.display = 'none';
-                    switch (index) {
-                      case 0:
-                        document.getElementById('output').innerHTML = 'Clue 1';
-                        break;
-                      case 1:
-                        document.getElementById('output').innerHTML = 'Clue 2';
-                        break;
-                      case 2:
-                        document.getElementById('output').innerHTML = 'Clue 3';
-                        break;
-                      case 3:
-                        document.getElementById('output').innerHTML = 'Clue 4';
-                        break;
-                    }
-                    document.getElementById('output').style.display = 'flex';
-                  }
+              try {
+                snapshot.forEach(childSnapshot => {
+                  const round1pass = childSnapshot.child("passkey").val();
+                  round1teamssplice.push(round1pass);
                 });
-              } else {
-                if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
-                  window.location.reload();
+                round1teams.splice(0, 0, ...round1teamssplice);
+                console.log(round1teams);
+                const userInput = prompt("Please enter your group passkey: ");
+                const resulttosave = result.text;
+                const index = round2.indexOf(resulttosave);
+                const allowedindex1 = index * 2;
+                const allowedindex2 = (index * 2) + 1;
+                if (round1teams.includes(userInput)) {
+                  if (userInput == round1teams[allowedindex1] || userInput == round1teams[allowedindex2]) {
+                    database.child(resulttosave).once('value').then(function (snapshot) {
+                      if (snapshot.exists()) {
+                        var savedpasskey = snapshot.val().passkey;
+                        if (savedpasskey === userInput) {
+                          document.getElementById('preview').style.display = 'none';
+                          switch (index) {
+                            case 0:
+                              document.getElementById('output').innerHTML = 'Clue 1';
+                              break;
+                            case 1:
+                              document.getElementById('output').innerHTML = 'Clue 2';
+                              break;
+                            case 2:
+                              document.getElementById('output').innerHTML = 'Clue 3';
+                              break;
+                            case 3:
+                              document.getElementById('output').innerHTML = 'Clue 4';
+                              break;
+                          }
+                          document.getElementById('output').style.display = 'flex';
+                        } else {
+                          alert("You are late. \nReport to staff. Your team has been eliminated.");
+                          document.getElementById('preview').style.display = 'none';
+                          // js html div for ty
+                        }
+                      } else {
+                        database.child(resulttosave).set({
+                          passkey: userInput,
+                          time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+                        });
+                        document.getElementById('preview').style.display = 'none';
+                        switch (index) {
+                          case 0:
+                            document.getElementById('output').innerHTML = 'Clue 1';
+                            break;
+                          case 1:
+                            document.getElementById('output').innerHTML = 'Clue 2';
+                            break;
+                          case 2:
+                            document.getElementById('output').innerHTML = 'Clue 3';
+                            break;
+                          case 3:
+                            document.getElementById('output').innerHTML = 'Clue 4';
+                            break;
+                        }
+                        document.getElementById('output').style.display = 'flex';
+                      }
+                    });
+                  } else {
+                    if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
+                      window.location.reload();
+                    }
+                  }
+                } else if (round1teams.includes(userInput) == false && password.includes(userInput) == true) {
+                  if (!window.alert("Incorrect passkey. \nYour team has been eliminated.")) {
+                    window.location.reload();
+                  }
+                } else {
+                  if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
+                    window.location.reload();
+                  }
                 }
+              } catch (error) {
+                console.error('Error retrieving data from Firebase: ', error);
               }
-            } else {
-              if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
-                window.location.reload();
+            });
+          } else if (round3.includes(result.text)) {
+            var database = firebase.database().ref('round3db');
+            firebase.database().ref('round2db').once('value').then(snapshot => {
+              try {
+                snapshot.forEach(childSnapshot => {
+                  const round2pass = childSnapshot.child("passkey").val();
+                  round2teams.push(round2pass);
+                });
+                console.log(round2teams);
+                const userInput = prompt("Please enter your group passkey: ");
+                const resulttosave = result.text;
+                const index = round3.indexOf(resulttosave);
+                const allowedindex1 = index * 2;
+                const allowedindex2 = (index * 2) + 1;
+                if (round2teams.includes(userInput)) {
+                  if (userInput == round2teams[allowedindex1] || userInput == round2teams[allowedindex2]) {
+                    database.child(resulttosave).once('value').then(function (snapshot) {
+                      if (snapshot.exists()) {
+                        var savedpasskey = snapshot.val().passkey;
+                        if (savedpasskey === userInput) {
+                          document.getElementById('preview').style.display = 'none';
+                          switch (index) {
+                            case 0:
+                              document.getElementById('output').innerHTML = 'Clue 1';
+                              break;
+                            case 1:
+                              document.getElementById('output').innerHTML = 'Clue 2';
+                              break;
+                          }
+                          document.getElementById('output').style.display = 'flex';
+                        } else {
+                          alert("You are late. \nReport to staff. Your team has been eliminated.");
+                          document.getElementById('preview').style.display = 'none';
+                          // js html div for ty
+                        }
+                      } else {
+                        database.child(resulttosave).set({
+                          passkey: userInput,
+                          time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+                        });
+                        document.getElementById('preview').style.display = 'none';
+                        switch (index) {
+                          case 0:
+                            document.getElementById('output').innerHTML = 'Clue 1';
+                            break;
+                          case 1:
+                            document.getElementById('output').innerHTML = 'Clue 2';
+                            break;
+                        }
+                        document.getElementById('output').style.display = 'flex';
+                      }
+                    });
+                  } else {
+                    if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
+                      window.location.reload();
+                    }
+                  }
+                } else if (round1teams.includes(userInput) == false && password.includes(userInput) == true) {
+                  if (!window.alert("Incorrect passkey. \nYour team has been eliminated.")) {
+                    window.location.reload();
+                  }
+                } else {
+                  if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
+                    window.location.reload();
+                  }
+                }
+              } catch (error) {
+                console.error('Error retrieving data from Firebase: ', error);
               }
-            }
-          } else {
+            });
+          } else if (round4.includes(result.text)) {
+            var database = firebase.database().ref('round4db');
+            const currentpoints = parseInt(result.text.match(/\d+/g).join(''));
+            firebase.database().ref('round3db').once('value').then(snapshot => {
+              try {
+                snapshot.forEach(childSnapshot => {
+                  const round2pass = childSnapshot.child("passkey").val();
+                  round3teams.push(round2pass);
+                });
+                console.log(round3teams);
+                const userInput = prompt("Please enter your group passkey: ");
+                const resulttosave = result.text;
+                const index = round4.indexOf(resulttosave);
+                if (round3teams.includes(userInput)) {
+                  if (userInput == round3teams[0] || userInput == round3teams[1]) {
+                    
+                  } else {
+                    if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
+                      window.location.reload();
+                    }
+                  }
+                } else if (round1teams.includes(userInput) == false && password.includes(userInput) == true) {
+                  if (!window.alert("Incorrect passkey. \nYour team has been eliminated.")) {
+                    window.location.reload();
+                  }
+                } else {
+                  if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
+                    window.location.reload();
+                  }
+                }
+              } catch (error) {
+                console.error('Error retrieving data from Firebase: ', error);
+              }
+            });
+          }  else {
             if (!window.alert("Detected QR is not a part of this QR hunt.")) {
               window.location.reload();
             }
