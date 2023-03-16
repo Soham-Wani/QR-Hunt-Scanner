@@ -6,7 +6,7 @@ Camera glitch
 scanner timeout
 ip address security
 round 4 optimise (after 1 scan what?, array change for alpha,)
-time issue
+(fixed) time issue
 -->
 
 <head>
@@ -84,7 +84,7 @@ time issue
     const round3 = ['3q1', '3q2'];
     const round3teams = []; // 2
     const round4 = ['4q1p10', '4q2p10', '4q3p10', '4q4p10', '4q5p10', '4q6p10', '4q7p10', '4q8p10', '4q9p10', '4q10p10', '4q11p10', '4q12p10', '4q13p10', '4q14p10', '4q15p10', '4q16p10', '4q17p10', '4q18p10', '4q19p10', '4q20p10', '4q21p15', '4q22p15', '4q23p15', '4q24p15', '4q25p15', '4q26p15', '4q27p15', '4q28p15', '4q29p15', '4q30p15', '4q31p20', '4q32p20', '4q33p20', '4q34p20', '4q35p20', '4q36p20', '4q37p20', '4q38p20', '4q39p20', '4q40p20', '4q41p25', '4q42p25', '4q43p25', '4q44p25', '4q45p25', '4q46p30', '4q47p30', '4q48p30', '4q49p30', '4q50p30'];
-    let huntendtime = 'March 16, 2023 18:00:00 GMT+0530';
+    let huntendtime = 'March 16, 2023 22:00:00 GMT+0530';
     if (document.body.getBoundingClientRect().height > document.body.getBoundingClientRect().width) {
       document.getElementById('preview').style.maxHeight = '80vh';
       document.getElementById('preview').style.width = '80vw';
@@ -107,7 +107,7 @@ time issue
       }
       codeReader.decodeFromInputVideoDevice(deviceId, 'preview')
         .then(result => {
-          if (round1.includes(result.text) || new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) <= new Date(huntendtime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) {
+          if (round1.includes(result.text) == true && new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) <= new Date(huntendtime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) {
             var database = firebase.database().ref('round1db');
             const userInput = prompt("Please enter your group passkey: ");
             const resulttosave = result.text;
@@ -186,7 +186,7 @@ time issue
                 window.location.reload();
               }
             }
-          } else if (round2.includes(result.text) || new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) <= new Date(huntendtime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) {
+          } else if (round2.includes(result.text) == true && new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) <= new Date(huntendtime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) {
             var database = firebase.database().ref('round2db');
             firebase.database().ref('round1db').once('value').then(snapshot => {
               try {
@@ -269,7 +269,7 @@ time issue
                 console.error('Error retrieving data from Firebase: ', error);
               }
             });
-          } else if (round3.includes(result.text) || new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) <= new Date(huntendtime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) {
+          } else if (round3.includes(result.text) == true && new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) <= new Date(huntendtime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) {
             var database = firebase.database().ref('round3db');
             firebase.database().ref('round2db').once('value').then(snapshot => {
               try {
@@ -339,7 +339,7 @@ time issue
                 console.error('Error retrieving data from Firebase: ', error);
               }
             });
-          } else if (round4.includes(result.text) || new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) <= new Date(huntendtime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) {
+          } else if (round4.includes(result.text) == true && new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) <= new Date(huntendtime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) {
             var database = firebase.database().ref('round4db');
             const scannedpoints = parseInt(result.text.match(/\d+/g).join(''));
             firebase.database().ref('round3db').once('value').then(snapshot => {
@@ -403,6 +403,10 @@ time issue
                 console.error('Error retrieving data from Firebase: ', error);
               }
             });
+          } else if (new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) >= new Date(huntendtime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) {
+            if (!window.alert("This QR hunt has been ended.")) {
+              window.location.reload();
+            }
           } else {
             if (!window.alert("Detected QR is not a part of this QR hunt.")) {
               window.location.reload();
