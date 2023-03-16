@@ -1,5 +1,13 @@
 <html>
 <!-- https://console.firebase.google.com/project/qr-hunt-1/database/qr-hunt-1-default-rtdb/data/~2F -->
+<!-- Pre-Alpha Release v1.0.0 bugs:
+Camera glitch
+.lowercase()
+scanner timeout
+ip address security
+round 4 optimise (after 1 scan what?, array change for alpha,)
+time issue
+-->
 
 <head>
   <title>QR Code Scanner</title>
@@ -353,15 +361,27 @@
                         }
                       } else {
                         database.child(userInput).once('value').then(function (snapshot) {
-                          const oldpoints = snapshot.val().points || 0;
-                          const totalpoints = oldpoints + scannedpoints;
-                          database.child(userInput).set({
-                            points: totalpoints
-                          });
-                          database.child(resulttosave).set({
-                            passkey: userInput,
-                            time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
-                          });
+                          if (snapshot.val() !== null) {
+                            const oldpoints = snapshot.val().points;
+                            const totalpoints = oldpoints + scannedpoints;
+                            database.child(userInput).set({
+                              points: totalpoints
+                            });
+                            database.child(resulttosave).set({
+                              passkey: userInput,
+                              time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+                            });
+                          } else {
+                            const oldpoints = 0;
+                            const totalpoints = oldpoints + scannedpoints;
+                            database.child(userInput).set({
+                              points: totalpoints
+                            });
+                            database.child(resulttosave).set({
+                              passkey: userInput,
+                              time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+                            });
+                          }
                         });
                       }
                     });
