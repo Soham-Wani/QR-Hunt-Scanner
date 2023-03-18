@@ -3,7 +3,7 @@
 <!-- Pre-Alpha Release v1.0.0 bugs:
 Camera glitch
 (fixed) Input in any case
-Scanner timeouts
+(fixed) Scanner timeouts
 IP address security
 Optimize round 4 code
 (fixed) Incorrect times
@@ -75,7 +75,17 @@ Place proper landing codes
       appId: "1:809676584252:web:fc9412bb864fe79a071a39"
     };
     firebase.initializeApp(firebaseConfig);
+    let scanTimer;
     const codeReader = new ZXing.BrowserQRCodeReader();
+    function startScanTimer() {
+      scanTimer = setTimeout(() => {
+        location.reload();
+      }, 300000);
+    }
+    function resetScanTimer() {
+      clearTimeout(scanTimer);
+      startScanTimer();
+    }
     const password = ['pass1', 'pass2', 'pass3', 'pass4', 'pass5', 'pass6', 'pass7', 'pass8', 'pass9', 'pass10', 'pass11', 'pass12'];
     const round1 = ['1q1', '1q2', '1q3', '1q4', '1q5', '1q6'];
     const round1teams = ['pass13', 'pass14'];
@@ -413,6 +423,7 @@ Place proper landing codes
               window.location.reload();
             }
           }
+          resetScanTimer();
         })
         .catch(err => {
           console.error(err);
@@ -423,7 +434,9 @@ Place proper landing codes
           } else {
             window.alert('This is an unanticipated error. Please report to staff. \n' + err.message + '.');
           }
+          resetScanTimer();
         });
+      startScanTimer();
     });
   </script>
 
