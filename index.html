@@ -1,11 +1,11 @@
 <html>
 <!-- https://console.firebase.google.com/project/qr-hunt-1/database/qr-hunt-1-default-rtdb/data/~2F -->
-<!-- Pre-Alpha Release v1.0.0 bugs:
-Camera glitch
+<!-- Pre-Alpha Release v1.0.0 bugs: (to be fixed for v2.0.0)
+(fixed) Camera glitch
 (fixed) Input in any case
 (fixed) Scanner timeouts
-IP address security
-Optimize round 4 code
+(Pushed for future update) IP address security
+(fixed) Optimize round 4 code errors
 (fixed) Incorrect times
 Place proper landing codes
 -->
@@ -108,7 +108,7 @@ Place proper landing codes
     }
     codeReader.getVideoInputDevices().then(videoInputDevices => {
       let deviceId;
-      const rearCamera = videoInputDevices.find(device => {
+      const rearCamera = videoInputDevices.filter(device => {
         deviceId = device.deviceId;
         return device.label.includes('back') || device.label.includes('rear');
       });
@@ -368,7 +368,7 @@ Place proper landing codes
                     database.child(resulttosave).once('value').then(function (snapshot) {
                       if (snapshot.exists()) {
                         if (!window.alert("This QR is already scanned.")) {
-                          window.locattion.reload();
+                          window.location.reload();
                         }
                       } else {
                         database.child(userInput.toLowerCase()).once('value').then(function (snapshot) {
@@ -393,6 +393,9 @@ Place proper landing codes
                               time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
                             });
                           }
+                          document.getElementById('preview').style.display = 'none';
+                          document.getElementById('output').innerHTML = 'Your team just scanned and recieved ' + scannedpoints + ' points.';
+                          document.getElementById('output').style.display = 'flex';
                         });
                       }
                     });
