@@ -4,10 +4,10 @@
 (fixed) Camera glitch
 (fixed) Input in any case
 (fixed) Scanner timeouts
-(Pushed for future update) IP address security
+(Pushed) IP address security
 (fixed) Optimize round 4 code errors
 (fixed) Incorrect times
-Place proper landing codes
+(fixed) Place proper landing codes instead of comments
 -->
 
 <head>
@@ -56,6 +56,21 @@ Place proper landing codes
       background-color: rgba(255, 0, 0, 0.1);
       z-index: 2;
     }
+
+    #thankyou {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: white;
+      background-color: rgba(255, 0, 0, 0.1);
+      z-index: 2;
+    }
   </style>
 </head>
 
@@ -64,6 +79,7 @@ Place proper landing codes
     <video id="preview"></video>
   </div>
   <div id="output"></div>
+  <div id="thankyou">Thank you for playing</div>
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyA1sy05k4XhbHYxCqL1UKN_AuGwAmnOA2A",
@@ -107,13 +123,17 @@ Place proper landing codes
       document.getElementById('preview').style.width = '80vw';
     }
     codeReader.getVideoInputDevices().then(videoInputDevices => {
-      let deviceId;
-      const rearCamera = videoInputDevices.filter(device => {
-        deviceId = device.deviceId;
-        return device.label.includes('back') || device.label.includes('rear');
+      let deviceId = localStorage.getItem('defaultDeviceId');
+      const rearCamera = videoInputDevices.find(device => {
+        if (device.label.includes('back') || device.label.includes('rear')) {
+          deviceId = device.deviceId;
+          localStorage.setItem('defaultDeviceId', deviceId);
+          return true;
+        }
+        return false;
       });
       if (!rearCamera) {
-        deviceId = videoInputDevices[0].deviceId;
+        deviceId = localStorage.getItem('defaultDeviceId') || videoInputDevices[0].deviceId;
         document.getElementById('preview').style.transform = 'scaleX(-1)';
       }
       codeReader.decodeFromInputVideoDevice(deviceId, 'preview')
@@ -156,7 +176,8 @@ Place proper landing codes
                     } else {
                       alert("You are late. \nReport to staff. Your team has been eliminated.");
                       document.getElementById('preview').style.display = 'none';
-                      // js html div for ty
+                      document.getElementById('output').style.display = 'none';
+                      document.getElementById('thankyou').style.display = 'flex';
                     }
                   } else {
                     database.child(resulttosave).set({
@@ -237,7 +258,8 @@ Place proper landing codes
                         } else {
                           alert("You are late. \nReport to staff. Your team has been eliminated.");
                           document.getElementById('preview').style.display = 'none';
-                          // js html div for ty
+                          document.getElementById('output').style.display = 'none';
+                          document.getElementById('thankyou').style.display = 'flex';
                         }
                       } else {
                         database.child(resulttosave).set({
@@ -313,7 +335,8 @@ Place proper landing codes
                         } else {
                           alert("You are late. \nReport to staff. Your team has been eliminated.");
                           document.getElementById('preview').style.display = 'none';
-                          // js html div for ty
+                          document.getElementById('output').style.display = 'none';
+                          document.getElementById('thankyou').style.display = 'flex';
                         }
                       } else {
                         database.child(resulttosave).set({
