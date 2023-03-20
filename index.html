@@ -1,5 +1,11 @@
 <html>
 <!-- https://console.firebase.google.com/project/qr-hunt-1/database/qr-hunt-1-default-rtdb/data/~2F -->
+<!--
+  1. Hide and retrieve system and QR values in firebase (10 hours)
+  2. Update innerHTML javascript (4 hours)
+  3. CSS (2 hour)
+  4. Timed rounds (1 hour)
+-->
 
 <head>
   <title>QR Hunt Scanner</title>
@@ -90,6 +96,20 @@
       background-color: rgba(255, 0, 0, 0.1);
       z-index: 2;
     }
+
+    a {
+      background: transparent;
+      border: 5px solid transparent;
+      border-radius: 20px;
+      z-index: 1;
+      height: 80vh;
+      width: 80vw;
+      padding-top: 5px;
+      color: white;
+      font-weight: 900;
+      font-size: 20px;
+      text-decoration: none;
+    }
   </style>
 </head>
 
@@ -111,6 +131,28 @@
       appId: "1:809676584252:web:fc9412bb864fe79a071a39"
     };
     firebase.initializeApp(firebaseConfig);
+    firebase.database().ref('Clues').child('round0').set({ // 12 (6 Glink)
+      clue1: 'hi',
+      clue2: 'hi',
+      clue3: 'hi',
+      clue4: 'hi',
+      clue5: 'hi',
+      clue6: 'hi'
+    });
+    firebase.database().ref('Clues').child('round1').set({ // 8 (4 Photo Clue)
+      clue1: 'hi',
+      clue2: 'hi',
+      clue3: 'hi',
+      clue4: 'hi'
+    });
+    firebase.database().ref('Clues').child('round2').set({ // 4 (2 video links)
+      clue1: 'hi',
+      clue2: 'hi'
+    });
+    firebase.database().ref('Clues').child('round3').set({ // 2 confirmations
+      clue1: 'hi',
+      clue2: 'hi'
+    });
     let scanTimer;
     const codeReader = new ZXing.BrowserQRCodeReader();
     function startScanTimer() {
@@ -132,7 +174,7 @@
     const round3 = ['3q1', '3q2'];
     const round3teams = []; // 2
     const round4 = ['4q1p10', '4q2p10', '4q3p10', '4q4p10', '4q5p10', '4q6p10', '4q7p10', '4q8p10', '4q9p10', '4q10p10', '4q11p10', '4q12p10', '4q13p10', '4q14p10', '4q15p10', '4q16p10', '4q17p10', '4q18p10', '4q19p10', '4q20p10', '4q21p15', '4q22p15', '4q23p15', '4q24p15', '4q25p15', '4q26p15', '4q27p15', '4q28p15', '4q29p15', '4q30p15', '4q31p20', '4q32p20', '4q33p20', '4q34p20', '4q35p20', '4q36p20', '4q37p20', '4q38p20', '4q39p20', '4q40p20', '4q41p25', '4q42p25', '4q43p25', '4q44p25', '4q45p25', '4q46p30', '4q47p30', '4q48p30', '4q49p30', '4q50p30'];
-    const huntendtime = '2023-03-19T22:00:00+05:30';
+    const huntendtime = '2023-03-20T22:00:00+05:30';
     let clue;
     if (document.body.getBoundingClientRect().height > document.body.getBoundingClientRect().width) {
       document.getElementById('preview').style.maxHeight = '80vh';
@@ -280,7 +322,7 @@
                         clue = '';
                         break;
                     }
-                    document.getElementById('output').innerHTML = '<div id=\'imagecontainer\'><img id="image" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
+                    document.getElementById('output').innerHTML = '<div id=\'imagecontainer\'><img id="image" src=\'' + clue + '\' /><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a></div>';
                     document.getElementById('output').style.display = 'flex';
                   }
                 });
