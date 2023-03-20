@@ -1,10 +1,11 @@
 <html>
 <!-- https://console.firebase.google.com/project/qr-hunt-1/database/qr-hunt-1-default-rtdb/data/~2F -->
 <!--
-  1. Hide and retrieve system and QR values in firebase (10 hours)
-  2. Update innerHTML javascript (4 hours)
+  1. Hide and retrieve system values in firebase (5 hours) [done]
+  2. Update innerHTML javascript and pop up texts (4 hours)
   3. CSS (2 hour)
   4. Timed rounds (1 hour)
+  5. Hide and retrieve QR values in firebase (5 hours)
 -->
 
 <head>
@@ -58,6 +59,27 @@
     }
 
     #iframe {
+      background: transparent;
+      border: 5px solid transparent;
+      border-radius: 20px;
+      z-index: 1;
+      height: 80vh;
+      width: 80vw;
+    }
+
+    #videocontainer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      position: fixed;
+    }
+
+    #video {
       background: transparent;
       border: 5px solid transparent;
       border-radius: 20px;
@@ -132,7 +154,7 @@
     };
     firebase.initializeApp(firebaseConfig);
     firebase.database().ref('Clues').child('round0').set({ // 12 (6 Glink)
-      clue1: 'hi',
+      clue1: 'https://usualqueries.blogspot.com',
       clue2: 'hi',
       clue3: 'hi',
       clue4: 'hi',
@@ -149,10 +171,9 @@
       clue1: 'hi',
       clue2: 'hi'
     });
-    firebase.database().ref('Clues').child('round3').set({ // 2 confirmations
-      clue1: 'hi',
-      clue2: 'hi'
-    });
+    //   firebase.database().ref('Clues').child('round0').once('value').then(function (snapshot) {
+
+    //    });
     let scanTimer;
     const codeReader = new ZXing.BrowserQRCodeReader();
     function startScanTimer() {
@@ -217,30 +238,32 @@
                     passkey: userInput.toLowerCase(),
                     time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
                   });
-                  document.getElementById('preview').style.display = 'none';
-                  switch (index) {
-                    // 6 google maps links
-                    case 0:
-                      clue = 'https://usualqueries.blogspot.com';
-                      break;
-                    case 1:
-                      clue = '';
-                      break;
-                    case 2:
-                      clue = '';
-                      break;
-                    case 3:
-                      clue = '';
-                      break;
-                    case 4:
-                      clue = '';
-                      break;
-                    case 5:
-                      clue = '';
-                      break;
-                  }
-                  document.getElementById('output').innerHTML = '<div id=\'iframecontainer\'><iframe id="iframe" src=\'' + clue + '\'></iframe></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
-                  document.getElementById('output').style.display = 'flex';
+                  firebase.database().ref('Clues').child('round1').once('value').then(function (snapshot) {
+                    document.getElementById('preview').style.display = 'none';
+                    switch (index) {
+                      // 6 google maps links
+                      case 0:
+                        clue = snapshot.val().clue1;
+                        break;
+                      case 1:
+                        clue = snapshot.val().clue2;
+                        break;
+                      case 2:
+                        clue = snapshot.val().clue3;
+                        break;
+                      case 3:
+                        clue = snapshot.val().clue4;
+                        break;
+                      case 4:
+                        clue = snapshot.val().clue5;
+                        break;
+                      case 5:
+                        clue = snapshot.val().clue6;
+                        break;
+                    }
+                    document.getElementById('output').innerHTML = '<div id=\'iframecontainer\'><iframe id="iframe" src=\'' + clue + '\'></iframe></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
+                    document.getElementById('output').style.display = 'flex';
+                  });
                 });
               } else {
                 if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
@@ -266,64 +289,80 @@
                     var savedpasskey = snapshot.val().passkey;
                     if (savedpasskey === userInput.toLowerCase()) {
                       document.getElementById('preview').style.display = 'none';
+                      firebase.database().ref('Clues').child('round0').once('value').then(function (snapshot) {
+                        switch (index) {
+                          // 6 Images (3 unique)
+                          case 0:
+                            clue = snapshot.val().clue1;
+                            break;
+                          case 1:
+                            clue = snapshot.val().clue1;
+                            break;
+                          case 2:
+                            clue = snapshot.val().clue2;
+                            break;
+                          case 3:
+                            clue = snapshot.val().clue2;
+                            break;
+                          case 4:
+                            clue = snapshot.val().clue3;
+                            break;
+                          case 5:
+                            clue = snapshot.val().clue3;
+                            break;
+                          case 6:
+                            clue = snapshot.val().clue4;
+                            break;
+                          case 7:
+                            clue = snapshot.val().clue4;
+                            break;
+                        }
+                        document.getElementById('output').innerHTML = '<div id=\'imagecontainer\'><img id="image" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
+                        document.getElementById('output').style.display = 'flex';
+                      });
+                    } else {
+                      alert("You are late. \nReport to staff. Your team has been eliminated.");
+                      document.getElementById('preview').style.display = 'none';
+                      document.getElementById('output').style.display = 'none';
+                      document.getElementById('thankyou').style.display = 'flex';
+                    }
+                  } else {
+                    database.child(resulttosave).set({
+                      passkey: userInput.toLowerCase(),
+                      time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+                    });
+                    document.getElementById('preview').style.display = 'none';
+                    firebase.database().ref('Clues').child('round0').once('value').then(function (snapshot) {
                       switch (index) {
-                        // 6 Images (3 unique)
+                        // 6 + 2 Images (3 + 1 unique)
                         case 0:
-                          clue = 'https://cdn.pixabay.com/photo/2023/01/01/21/33/mountain-7690893_960_720.jpg';
+                          clue = snapshot.val().clue1;
                           break;
                         case 1:
-                          clue = '';
+                          clue = snapshot.val().clue1;
                           break;
                         case 2:
-                          clue = '';
+                          clue = snapshot.val().clue2;
                           break;
                         case 3:
-                          clue = '';
+                          clue = snapshot.val().clue2;
                           break;
                         case 4:
-                          clue = '';
+                          clue = snapshot.val().clue3;
                           break;
                         case 5:
-                          clue = '';
+                          clue = snapshot.val().clue3;
+                          break;
+                        case 6:
+                          clue = snapshot.val().clue4;
+                          break;
+                        case 7:
+                          clue = snapshot.val().clue4;
                           break;
                       }
                       document.getElementById('output').innerHTML = '<div id=\'imagecontainer\'><img id="image" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
                       document.getElementById('output').style.display = 'flex';
-                    } else {
-                      alert("You are late. \nReport to staff. Your team has been eliminated.");
-                      document.getElementById('preview').style.display = 'none';
-                      document.getElementById('output').style.display = 'none';
-                      document.getElementById('thankyou').style.display = 'flex';
-                    }
-                  } else {
-                    database.child(resulttosave).set({
-                      passkey: userInput.toLowerCase(),
-                      time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
                     });
-                    document.getElementById('preview').style.display = 'none';
-                    switch (index) {
-                      // 6 Images (3 unique)
-                      case 0:
-                        clue = 'https://cdn.pixabay.com/photo/2023/01/01/21/33/mountain-7690893_960_720.jpg';
-                        break;
-                      case 1:
-                        clue = '';
-                        break;
-                      case 2:
-                        clue = '';
-                        break;
-                      case 3:
-                        clue = '';
-                        break;
-                      case 4:
-                        clue = '';
-                        break;
-                      case 5:
-                        clue = '';
-                        break;
-                    }
-                    document.getElementById('output').innerHTML = '<div id=\'imagecontainer\'><img id="image" src=\'' + clue + '\' /><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a></div>';
-                    document.getElementById('output').style.display = 'flex';
                   }
                 });
               } else {
@@ -358,21 +397,24 @@
                         var savedpasskey = snapshot.val().passkey;
                         if (savedpasskey === userInput.toLowerCase()) {
                           document.getElementById('preview').style.display = 'none';
-                          switch (index) {
-                            case 0:
-                              document.getElementById('output').innerHTML = 'Clue 1';
-                              break;
-                            case 1:
-                              document.getElementById('output').innerHTML = 'Clue 2';
-                              break;
-                            case 2:
-                              document.getElementById('output').innerHTML = 'Clue 3';
-                              break;
-                            case 3:
-                              document.getElementById('output').innerHTML = 'Clue 4';
-                              break;
-                          }
-                          document.getElementById('output').style.display = 'flex';
+                          firebase.database().ref('Clues').child('round0').once('value').then(function (snapshot) {
+                            switch (index) {
+                              case 0:
+                                clue = snapshot.val().clue1;
+                                break;
+                              case 1:
+                                clue = snapshot.val().clue1;
+                                break;
+                              case 2:
+                                clue = snapshot.val().clue2;
+                                break;
+                              case 3:
+                                clue = snapshot.val().clue2;
+                                break;
+                            }
+                            document.getElementById('output').innerHTML = '<div id=\'videocontainer\'><video id="video" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
+                            document.getElementById('output').style.display = 'flex';
+                          });
                         } else {
                           alert("You are late. \nReport to staff. Your team has been eliminated.");
                           document.getElementById('preview').style.display = 'none';
@@ -385,185 +427,24 @@
                           time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
                         });
                         document.getElementById('preview').style.display = 'none';
-                        switch (index) {
-                          case 0:
-                            document.getElementById('output').innerHTML = 'Clue 1';
-                            break;
-                          case 1:
-                            document.getElementById('output').innerHTML = 'Clue 2';
-                            break;
-                          case 2:
-                            document.getElementById('output').innerHTML = 'Clue 3';
-                            break;
-                          case 3:
-                            document.getElementById('output').innerHTML = 'Clue 4';
-                            break;
-                        }
-                        document.getElementById('output').style.display = 'flex';
-                      }
-                    });
-                  } else {
-                    if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
-                      window.location.reload();
-                    }
-                  }
-                } else if (round1teams.includes(userInput.toLowerCase()) == false && password.includes(userInput.toLowerCase()) == true) {
-                  if (!window.alert("Incorrect passkey. \nYour team has been eliminated.")) {
-                    window.location.reload();
-                  }
-                } else {
-                  if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
-                    window.location.reload();
-                  }
-                }
-              } catch (error) {
-                console.error('Error retrieving data from Firebase: ', error);
-              }
-            });
-          } else if (round1.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(huntendtime)) {
-            var database = firebase.database().ref('round1db');
-            const userInput = prompt("Please enter your group passkey: ");
-            const resulttosave = result.text;
-            const index = round1.indexOf(resulttosave);
-            const allowedindex1 = index * 2;
-            const allowedindex2 = (index * 2) + 1;
-            if (password.includes(userInput.toLowerCase())) {
-              if (userInput.toLowerCase() == password[allowedindex1] || userInput.toLowerCase() == password[allowedindex2]) {
-                database.child(resulttosave).once('value').then(function (snapshot) {
-                  if (snapshot.exists()) {
-                    var savedpasskey = snapshot.val().passkey;
-                    if (savedpasskey === userInput.toLowerCase()) {
-                      document.getElementById('preview').style.display = 'none';
-                      switch (index) {
-                        case 0:
-                          document.getElementById('output').innerHTML = 'Clue 1';
-                          break;
-                        case 1:
-                          document.getElementById('output').innerHTML = 'Clue 2';
-                          break;
-                        case 2:
-                          document.getElementById('output').innerHTML = 'Clue 3';
-                          break;
-                        case 3:
-                          document.getElementById('output').innerHTML = 'Clue 4';
-                          break;
-                        case 4:
-                          document.getElementById('output').innerHTML = 'Clue 5';
-                          break;
-                        case 5:
-                          document.getElementById('output').innerHTML = 'Clue 6';
-                          break;
-                      }
-                      document.getElementById('output').style.display = 'flex';
-                    } else {
-                      alert("You are late. \nReport to staff. Your team has been eliminated.");
-                      document.getElementById('preview').style.display = 'none';
-                      document.getElementById('output').style.display = 'none';
-                      document.getElementById('thankyou').style.display = 'flex';
-                    }
-                  } else {
-                    database.child(resulttosave).set({
-                      passkey: userInput.toLowerCase(),
-                      time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
-                    });
-                    document.getElementById('preview').style.display = 'none';
-                    switch (index) {
-                      case 0:
-                        document.getElementById('output').innerHTML = 'Clue 1';
-                        break;
-                      case 1:
-                        document.getElementById('output').innerHTML = 'Clue 2';
-                        break;
-                      case 2:
-                        document.getElementById('output').innerHTML = 'Clue 3';
-                        break;
-                      case 3:
-                        document.getElementById('output').innerHTML = 'Clue 4';
-                        break;
-                      case 4:
-                        document.getElementById('output').innerHTML = 'Clue 5';
-                        break;
-                      case 5:
-                        document.getElementById('output').innerHTML = 'Clue 6';
-                        break;
-                    }
-                    document.getElementById('output').style.display = 'flex';
-                  }
-                });
-              } else {
-                if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
-                  window.location.reload();
-                }
-              }
-            } else {
-              if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
-                window.location.reload();
-              }
-            }
-          } else if (round2.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(huntendtime)) {
-            var database = firebase.database().ref('round2db');
-            firebase.database().ref('round1db').once('value').then(snapshot => {
-              try {
-                snapshot.forEach(childSnapshot => {
-                  const round1pass = childSnapshot.child("passkey").val();
-                  round1teamssplice.push(round1pass);
-                });
-                round1teams.splice(0, 0, ...round1teamssplice);
-                console.log(round1teams);
-                const userInput = prompt("Please enter your group passkey: ");
-                const resulttosave = result.text;
-                const index = round2.indexOf(resulttosave);
-                const allowedindex1 = index * 2;
-                const allowedindex2 = (index * 2) + 1;
-                if (round1teams.includes(userInput.toLowerCase())) {
-                  if (userInput.toLowerCase() == round1teams[allowedindex1] || userInput.toLowerCase() == round1teams[allowedindex2]) {
-                    database.child(resulttosave).once('value').then(function (snapshot) {
-                      if (snapshot.exists()) {
-                        var savedpasskey = snapshot.val().passkey;
-                        if (savedpasskey === userInput.toLowerCase()) {
-                          document.getElementById('preview').style.display = 'none';
+                        firebase.database().ref('Clues').child('round0').once('value').then(function (snapshot) {
                           switch (index) {
                             case 0:
-                              document.getElementById('output').innerHTML = 'Clue 1';
+                              clue = snapshot.val().clue1;
                               break;
                             case 1:
-                              document.getElementById('output').innerHTML = 'Clue 2';
+                              clue = snapshot.val().clue1;
                               break;
                             case 2:
-                              document.getElementById('output').innerHTML = 'Clue 3';
+                              clue = snapshot.val().clue2;
                               break;
                             case 3:
-                              document.getElementById('output').innerHTML = 'Clue 4';
+                              clue = snapshot.val().clue2;
                               break;
                           }
+                          document.getElementById('output').innerHTML = '<div id=\'videocontainer\'><video id="video" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
                           document.getElementById('output').style.display = 'flex';
-                        } else {
-                          alert("You are late. \nReport to staff. Your team has been eliminated.");
-                          document.getElementById('preview').style.display = 'none';
-                          document.getElementById('output').style.display = 'none';
-                          document.getElementById('thankyou').style.display = 'flex';
-                        }
-                      } else {
-                        database.child(resulttosave).set({
-                          passkey: userInput.toLowerCase(),
-                          time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
                         });
-                        document.getElementById('preview').style.display = 'none';
-                        switch (index) {
-                          case 0:
-                            document.getElementById('output').innerHTML = 'Clue 1';
-                            break;
-                          case 1:
-                            document.getElementById('output').innerHTML = 'Clue 2';
-                            break;
-                          case 2:
-                            document.getElementById('output').innerHTML = 'Clue 3';
-                            break;
-                          case 3:
-                            document.getElementById('output').innerHTML = 'Clue 4';
-                            break;
-                        }
-                        document.getElementById('output').style.display = 'flex';
                       }
                     });
                   } else {
@@ -607,10 +488,10 @@
                           document.getElementById('preview').style.display = 'none';
                           switch (index) {
                             case 0:
-                              document.getElementById('output').innerHTML = 'Clue 1';
+                              document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
                               break;
                             case 1:
-                              document.getElementById('output').innerHTML = 'Clue 2';
+                              document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
                               break;
                           }
                           document.getElementById('output').style.display = 'flex';
@@ -628,10 +509,10 @@
                         document.getElementById('preview').style.display = 'none';
                         switch (index) {
                           case 0:
-                            document.getElementById('output').innerHTML = 'Clue 1';
+                            document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
                             break;
                           case 1:
-                            document.getElementById('output').innerHTML = 'Clue 2';
+                            document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
                             break;
                         }
                         document.getElementById('output').style.display = 'flex';
