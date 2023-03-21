@@ -136,7 +136,7 @@
 </head>
 
 <body>
-    <h1 style='color:white'>QR Quest: The Crusade</h1>
+    <h1 style='color:white;text-align:center;padding:20px'>QR Quest: The Crusade</h1>
     <div id="previewcontainer">
         <video id="preview"></video>
     </div>
@@ -220,7 +220,12 @@
             const round3 = [snapshot.val().r3q1, snapshot.val().r3q2];
             const round3teams = []; // 2
             const round4 = [snapshot.val().q1, snapshot.val().q2, snapshot.val().q3, snapshot.val().q4, snapshot.val().q5, snapshot.val().q6, snapshot.val().q7, snapshot.val().q8, snapshot.val().q9, snapshot.val().q10, snapshot.val().q11, snapshot.val().q12, snapshot.val().q13, snapshot.val().q14, snapshot.val().q15, snapshot.val().q16, snapshot.val().q17, snapshot.val().q18, snapshot.val().q19, snapshot.val().q20, snapshot.val().q21, snapshot.val().q22, snapshot.val().q23, snapshot.val().q24, snapshot.val().q25, snapshot.val().q26, snapshot.val().q27, snapshot.val().q28, snapshot.val().q29, snapshot.val().q30, snapshot.val().q31, snapshot.val().q32, snapshot.val().q33, snapshot.val().q34, snapshot.val().q35, snapshot.val().q36, snapshot.val().q37, snapshot.val().q38, snapshot.val().q39, snapshot.val().q40, snapshot.val().q41, snapshot.val().q42, snapshot.val().q43, snapshot.val().q44, snapshot.val().q45, snapshot.val().q46, snapshot.val().q47, snapshot.val().q48, snapshot.val().q49, snapshot.val().q50, snapshot.val().q51];
-            const huntendtime = '2023-03-22T22:00:00+05:30';
+            const huntstarttime = ;
+            const round0endtime = ;
+            const round1endtime = ;
+            const round2endtime = ;
+            const round3endtime = ;
+            const round4endtime = '2023-03-22T22:00:00+05:30';
             let clue;
             if (document.body.getBoundingClientRect().height > document.body.getBoundingClientRect().width) {
                 document.getElementById('preview').style.maxHeight = '80vh';
@@ -249,7 +254,7 @@
                 codeReader.decodeFromInputVideoDevice(deviceId, 'preview')
                     .then(result => {
                         resetScanTimer();
-                        if (round0.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(huntendtime)) {
+                        if (round0.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round4endtime)) {
                             var database = firebase.database().ref('round0db');
                             const userInput = prompt("Please enter your group passkey: ");
                             const resulttosave = result.text;
@@ -300,7 +305,7 @@
                                     window.location.reload();
                                 }
                             }
-                        } else if (round1.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(huntendtime)) {
+                        } else if (round1.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round4endtime)) {
                             var database = firebase.database().ref('round1db');
                             const userInput = prompt("Please enter your group passkey: ");
                             const resulttosave = result.text;
@@ -400,7 +405,7 @@
                                     window.location.reload();
                                 }
                             }
-                        } else if (round2.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(huntendtime)) {
+                        } else if (round2.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round4endtime)) {
                             var database = firebase.database().ref('round2db');
                             firebase.database().ref('round1db').once('value').then(snapshot => {
                                 try {
@@ -490,7 +495,7 @@
                                     console.error('Error retrieving data from Firebase: ', error);
                                 }
                             });
-                        } else if (round3.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(huntendtime)) {
+                        } else if (round3.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round4endtime)) {
                             var database = firebase.database().ref('round3db');
                             firebase.database().ref('round2db').once('value').then(snapshot => {
                                 try {
@@ -561,7 +566,7 @@
                                     console.error('Error retrieving data from Firebase: ', error);
                                 }
                             });
-                        } else if (round4.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(huntendtime)) {
+                        } else if (round4.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round4endtime)) {
                             var database = firebase.database().ref('round4db');
                             const scannedpoints = parseInt(result.text.match(/\d+/g).join(''));
                             firebase.database().ref('round3db').once('value').then(snapshot => {
@@ -628,7 +633,7 @@
                                     console.error('Error retrieving data from Firebase: ', error);
                                 }
                             });
-                        } else if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(huntendtime)) {
+                        } else if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round4endtime)) {
                             if (!window.alert("This QR hunt has been ended.")) {
                                 window.location.reload();
                             }
