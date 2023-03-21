@@ -125,57 +125,6 @@
       messagingSenderId: "809676584252",
       appId: "1:809676584252:web:fc9412bb864fe79a071a39"
     };
-    firebase.initializeApp(firebaseConfig);
-    firebase.database().ref('Clues').child('round0').set({ // 12 (6 Glink)
-      clue1: 'https://www.google.com/maps/place/22%C2%B017\'31.0%22N+73%C2%B016\'57.1%22E/@22.291941,73.282528,17z/data=!3m1!4b1!4m4!3m3!8m2!3d22.291941!4d73.282528',
-      clue2: 'https://www.google.com/maps/place/22%C2%B016\'55.5%22N+73%C2%B012\'09.0%22E/@22.282089,73.202501,17z/data=!3m1!4b1!4m4!3m3!8m2!3d22.282089!4d73.202501',
-      clue3: 'https://www.google.com/maps/place/22%C2%B016\'52.8%22N+73%C2%B012\'05.5%22E/@22.281341,73.201517,17z/data=!3m1!4b1!4m4!3m3!8m2!3d22.281341!4d73.201517',
-      clue4: 'https://www.google.com/maps/place/22%C2%B016\'50.8%22N+73%C2%B011\'59.1%22E/@22.280773,73.199756,17z/data=!3m1!4b1!4m4!3m3!8m2!3d22.280773!4d73.199756',
-      clue5: 'https://www.google.com/maps/place/22%C2%B016\'45.4%22N+73%C2%B011\'56.5%22E/@22.279275,73.199035,17z/data=!3m1!4b1!4m4!3m3!8m2!3d22.279275!4d73.199035',
-      clue6: 'https://www.google.com/maps/place/22%C2%B017\'30.5%22N+73%C2%B016\'54.4%22E/@22.291805,73.281774,17z/data=!3m1!4b1!4m4!3m3!8m2!3d22.291805!4d73.281774'
-    });
-    firebase.database().ref('Clues').child('round1').set({ // 8 (4 Photo Clue)
-      clue1: 'https://i.ibb.co/bmxDH1T/Whats-App-Image-2023-03-21-at-10-33-42-PM.jpg',
-      clue2: 'https://i.ibb.co/NyH8X7F/Whats-App-Image-2023-03-21-at-10-34-39-PM.jpg',
-      clue3: 'https://i.ibb.co/qrLX5pF/Whats-App-Image-2023-03-21-at-10-34-54-PM.jpg',
-      clue4: 'https://i.ibb.co/vX0R5tJ/Whats-App-Image-2023-03-21-at-10-35-29-PM.jpg'
-    });
-    firebase.database().ref('Clues').child('round2').set({ // 4 (2 video links)
-      clue1: 'https://www.youtube.com/embed/KJFEj8TuytI',
-      clue2: 'https://www.youtube.com/embed/SHeCT9wyntU'
-    });
-    firebase.database().ref('QRs').child('qrs').set({ // round 0
-      r0q1: 'abcd',
-      r0q2: 'bcdf',
-      r0q3: 'hiii',
-      r0q4: 'hvfi',
-      r0q5: 'tebi',
-      r0q6: 'regi',
-      // round 1
-      r1q1: 'qgje',
-      r1q2: 'asde',
-      r1q3: 'eftg',
-      r1q4: 'hijg',
-      r1q5: 'hokj',
-      r1q6: 'iodf',
-      r1q7: 'iocl',
-      r1q8: 'ytui',
-      // round 2
-      r2q1: 'uitt',
-      r2q2: 'dfhg',
-      r2q3: 'hfej',
-      r2q4: 'higj',
-      // round 3
-      r3q1: 'qwer',
-      r3q2: 'uity',
-      // round 4
-      q1: 'k1hf0g', q2: 'd1qe0u', q3: 'x1nr0v', q4: 'r1ay0j', q5: 'p1xe0t', q6: 'm1sd0r', q7: 'h1wi0p', q8: 'c1fd0x', q9: 'n1wo0x', q10: 'z1vj0a',
-      q11: 'l1hm0q', q12: 'f1ko0x', q13: 's1lo0v', q14: 'w1bp0i', q15: 'y1pe0o', q16: 'g1by0s', q17: 'j1wn0z', q18: 'u1lp0c', q19: 't1dp0j', q20: 'q1br0e',
-      q21: 'a1tm0f', q22: 'v1wo0j', q23: 'c1qj0z', q24: 'i1kn0b', q25: 'l1xp0f', q26: 'b1ty0o', q27: 'o1ck0u', q28: 'f1xr0c', q29: 'e1gm0p', q30: 't1wp0x',
-      q31: 'k2yx0v', q32: 'd2qe0u', q33: 'x2nr0v', q34: 'r2ay0j', q35: 'p2xe0t', q36: 'm2sd0r', q37: 'h2wi0p', q38: 'c2fd0x', q39: 'n2wo0x', q40: 'z2vj0a',
-      q41: 'l2hm0q', q42: 'f2ko0x', q43: 's2lo0v', q44: 'w2bp0i', q45: 'y2pe0o', q46: 'r3oe0p', q47: 's3iu0v', q48: 't3en0q', q49: 'n3og0u', q50: 'm3in0s',
-      q51: 'p3ks0a'
-    });
     let scanTimer;
     const codeReader = new ZXing.BrowserQRCodeReader();
     function startScanTimer() {
