@@ -1,6 +1,5 @@
 <html>
 <!-- https://console.firebase.google.com/project/qr-hunt-1/database/qr-hunt-1-default-rtdb/data/~2F -->
-<!-- ALPHA RELEASE -->
 
 <head>
   <title>QR Hunt Scanner</title>
@@ -125,6 +124,7 @@
       messagingSenderId: "809676584252",
       appId: "1:809676584252:web:fc9412bb864fe79a071a39"
     };
+    firebase.initializeApp(firebaseConfig);
     let scanTimer;
     const codeReader = new ZXing.BrowserQRCodeReader();
     function startScanTimer() {
