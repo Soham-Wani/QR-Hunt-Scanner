@@ -263,7 +263,7 @@
                                             passkey: userInput.toLowerCase(),
                                             time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
                                         });
-                                        firebase.database().ref('Clues').child('round1').once('value').then(function (snapshot) {
+                                        firebase.database().ref('Clues').child('round0').once('value').then(function (snapshot) {
                                             document.getElementById('preview').style.display = 'none';
                                             switch (index) {
                                                 // 6 google maps links
@@ -314,7 +314,7 @@
                                             var savedpasskey = snapshot.val().passkey;
                                             if (savedpasskey === userInput.toLowerCase()) {
                                                 document.getElementById('preview').style.display = 'none';
-                                                firebase.database().ref('Clues').child('round0').once('value').then(function (snapshot) {
+                                                firebase.database().ref('Clues').child('round1').once('value').then(function (snapshot) {
                                                     switch (index) {
                                                         // 6 Images (3 unique)
                                                         case 0:
@@ -357,7 +357,7 @@
                                                 time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
                                             });
                                             document.getElementById('preview').style.display = 'none';
-                                            firebase.database().ref('Clues').child('round0').once('value').then(function (snapshot) {
+                                            firebase.database().ref('Clues').child('round1').once('value').then(function (snapshot) {
                                                 switch (index) {
                                                     // 6 + 2 Images (3 + 1 unique)
                                                     case 0:
@@ -422,7 +422,7 @@
                                                     var savedpasskey = snapshot.val().passkey;
                                                     if (savedpasskey === userInput.toLowerCase()) {
                                                         document.getElementById('preview').style.display = 'none';
-                                                        firebase.database().ref('Clues').child('round0').once('value').then(function (snapshot) {
+                                                        firebase.database().ref('Clues').child('round2').once('value').then(function (snapshot) {
                                                             switch (index) {
                                                                 case 0:
                                                                     clue = snapshot.val().clue1;
@@ -452,7 +452,7 @@
                                                         time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
                                                     });
                                                     document.getElementById('preview').style.display = 'none';
-                                                    firebase.database().ref('Clues').child('round0').once('value').then(function (snapshot) {
+                                                    firebase.database().ref('Clues').child('round2').once('value').then(function (snapshot) {
                                                         switch (index) {
                                                             case 0:
                                                                 clue = snapshot.val().clue1;
