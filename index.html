@@ -1,663 +1,641 @@
 <html>
 <!-- https://console.firebase.google.com/project/qr-hunt-1/database/qr-hunt-1-default-rtdb/data/~2F -->
-<!--
-  1. Hide and retrieve system values in firebase (5 hours) [done]
-  2. Update innerHTML javascript and pop up texts (4 hours)
-  3. CSS (2 hour)
-  4. Timed rounds (1 hour)
-  5. Hide and retrieve QR values in firebase (5 hours) [done]
--->
+<!-- ALPHA RELEASE -->
 
 <head>
-    <title>QR Hunt Scanner</title>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@zxing/library@0.16.0/umd/index.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
-    <style>
-        @import url("https://fonts.googleapis.com/css?family=Montserrat");
+  <title>QR Hunt Scanner</title>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@zxing/library@0.16.0/umd/index.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
+  <style>
+    @import url("https://fonts.googleapis.com/css?family=Montserrat");
 
-        * {
-            font-family: "Montserrat", sans-serif;
-        }
+    * {
+      font-family: "Montserrat", sans-serif;
+    }
 
-        body {
-            background: #000000;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
-        }
+    body {
+      background: #000000;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
 
-        #previewcontainer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            position: fixed;
-        }
+    #previewcontainer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      position: fixed;
+    }
 
-        #preview {
-            background: transparent;
-            border: 5px solid transparent;
-            border-radius: 20px;
-            z-index: 1;
-        }
+    #preview {
+      background: transparent;
+      border: 5px solid transparent;
+      border-radius: 20px;
+      z-index: 1;
+    }
 
-        #iframecontainer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            position: fixed;
-        }
+    #iframecontainer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      position: fixed;
+    }
 
-        #iframe {
-            background: transparent;
-            border: 5px solid transparent;
-            border-radius: 20px;
-            z-index: 1;
-            height: 80vh;
-            width: 80vw;
-        }
+    #iframe {
+      background: transparent;
+      border: 5px solid transparent;
+      border-radius: 20px;
+      z-index: 1;
+      height: 80vh;
+      width: 80vw;
+    }
 
-        #videocontainer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            position: fixed;
-        }
+    #output {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: none;
+      padding: 25px;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: white;
+      background-color: rgba(255, 0, 0, 0.1);
+      z-index: 2;
+    }
 
-        #video {
-            background: transparent;
-            border: 5px solid transparent;
-            border-radius: 20px;
-            z-index: 1;
-            height: 80vh;
-            width: 80vw;
-        }
+    #thankyou {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: white;
+      background-color: rgba(255, 0, 0, 0.1);
+      z-index: 2;
+    }
 
-        #output {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            display: none;
-            padding: 25px;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            color: white;
-            background-color: rgba(255, 0, 0, 0.1);
-            z-index: 2;
-        }
-
-        #thankyou {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            color: white;
-            background-color: rgba(255, 0, 0, 0.1);
-            z-index: 2;
-        }
-
-        a {
-            background: transparent;
-            border: 5px solid transparent;
-            border-radius: 20px;
-            z-index: 1;
-            height: 80vh;
-            width: 80vw;
-            padding-top: 5px;
-            color: white;
-            font-weight: 900;
-            font-size: 20px;
-            text-decoration: none;
-        }
-    </style>
+    a {
+      background: transparent;
+      border: 5px solid transparent;
+      border-radius: 20px;
+      z-index: 1;
+      height: 80vh;
+      width: 80vw;
+      padding-top: 5px;
+      color: white;
+      font-weight: 900;
+      font-size: 20px;
+      text-decoration: none;
+    }
+  </style>
 </head>
 
 <body>
-    <h1 style='color:white;text-align:center;padding:20px'>QR Quest: The Crusade</h1>
-    <div id="previewcontainer">
-        <video id="preview"></video>
-    </div>
-    <div id="output"></div>
-    <div id="thankyou">Thank you for playing</div>
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyA1sy05k4XhbHYxCqL1UKN_AuGwAmnOA2A",
-            authDomain: "qr-hunt-1.firebaseapp.com",
-            databaseURL: "https://qr-hunt-1-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "qr-hunt-1",
-            storageBucket: "qr-hunt-1.appspot.com",
-            messagingSenderId: "809676584252",
-            appId: "1:809676584252:web:fc9412bb864fe79a071a39"
-        };
-        firebase.initializeApp(firebaseConfig);
-        firebase.database().ref('Clues').child('round0').set({ // 12 (6 Glink)
-            clue1: 'https://usualqueries.blogspot.com',
-            clue2: 'clue2',
-            clue3: 'hi',
-            clue4: 'hi',
-            clue5: 'hi',
-            clue6: 'hi'
+  <h1 style='color:white;text-align:center;padding:20px'>QR Quest: The Crusade</h1>
+  <div id="previewcontainer">
+    <video id="preview"></video>
+  </div>
+  <div id="output"></div>
+  <div id="thankyou">Thank you for playing</div>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA1sy05k4XhbHYxCqL1UKN_AuGwAmnOA2A",
+      authDomain: "qr-hunt-1.firebaseapp.com",
+      databaseURL: "https://qr-hunt-1-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "qr-hunt-1",
+      storageBucket: "qr-hunt-1.appspot.com",
+      messagingSenderId: "809676584252",
+      appId: "1:809676584252:web:fc9412bb864fe79a071a39"
+    };
+    firebase.initializeApp(firebaseConfig);
+    firebase.database().ref('Clues').child('round0').set({ // 12 (6 Glink)
+      clue1: 'https://www.google.com/maps/place/22%C2%B017\'31.0%22N+73%C2%B016\'57.1%22E/@22.291941,73.282528,17z/data=!3m1!4b1!4m4!3m3!8m2!3d22.291941!4d73.282528',
+      clue2: 'https://www.google.com/maps/place/22%C2%B016\'55.5%22N+73%C2%B012\'09.0%22E/@22.282089,73.202501,17z/data=!3m1!4b1!4m4!3m3!8m2!3d22.282089!4d73.202501',
+      clue3: 'https://www.google.com/maps/place/22%C2%B016\'52.8%22N+73%C2%B012\'05.5%22E/@22.281341,73.201517,17z/data=!3m1!4b1!4m4!3m3!8m2!3d22.281341!4d73.201517',
+      clue4: 'https://www.google.com/maps/place/22%C2%B016\'50.8%22N+73%C2%B011\'59.1%22E/@22.280773,73.199756,17z/data=!3m1!4b1!4m4!3m3!8m2!3d22.280773!4d73.199756',
+      clue5: 'https://www.google.com/maps/place/22%C2%B016\'45.4%22N+73%C2%B011\'56.5%22E/@22.279275,73.199035,17z/data=!3m1!4b1!4m4!3m3!8m2!3d22.279275!4d73.199035',
+      clue6: 'https://www.google.com/maps/place/22%C2%B017\'30.5%22N+73%C2%B016\'54.4%22E/@22.291805,73.281774,17z/data=!3m1!4b1!4m4!3m3!8m2!3d22.291805!4d73.281774'
+    });
+    firebase.database().ref('Clues').child('round1').set({ // 8 (4 Photo Clue)
+      clue1: 'https://i.ibb.co/bmxDH1T/Whats-App-Image-2023-03-21-at-10-33-42-PM.jpg',
+      clue2: 'https://i.ibb.co/NyH8X7F/Whats-App-Image-2023-03-21-at-10-34-39-PM.jpg',
+      clue3: 'https://i.ibb.co/qrLX5pF/Whats-App-Image-2023-03-21-at-10-34-54-PM.jpg',
+      clue4: 'https://i.ibb.co/vX0R5tJ/Whats-App-Image-2023-03-21-at-10-35-29-PM.jpg'
+    });
+    firebase.database().ref('Clues').child('round2').set({ // 4 (2 video links)
+      clue1: 'https://www.youtube.com/embed/KJFEj8TuytI',
+      clue2: 'https://www.youtube.com/embed/SHeCT9wyntU'
+    });
+    firebase.database().ref('QRs').child('qrs').set({ // round 0
+      r0q1: 'abcd',
+      r0q2: 'bcdf',
+      r0q3: 'hiii',
+      r0q4: 'hvfi',
+      r0q5: 'tebi',
+      r0q6: 'regi',
+      // round 1
+      r1q1: 'qgje',
+      r1q2: 'asde',
+      r1q3: 'eftg',
+      r1q4: 'hijg',
+      r1q5: 'hokj',
+      r1q6: 'iodf',
+      r1q7: 'iocl',
+      r1q8: 'ytui',
+      // round 2
+      r2q1: 'uitt',
+      r2q2: 'dfhg',
+      r2q3: 'hfej',
+      r2q4: 'higj',
+      // round 3
+      r3q1: 'qwer',
+      r3q2: 'uity',
+      // round 4
+      q1: 'k1hf0g', q2: 'd1qe0u', q3: 'x1nr0v', q4: 'r1ay0j', q5: 'p1xe0t', q6: 'm1sd0r', q7: 'h1wi0p', q8: 'c1fd0x', q9: 'n1wo0x', q10: 'z1vj0a',
+      q11: 'l1hm0q', q12: 'f1ko0x', q13: 's1lo0v', q14: 'w1bp0i', q15: 'y1pe0o', q16: 'g1by0s', q17: 'j1wn0z', q18: 'u1lp0c', q19: 't1dp0j', q20: 'q1br0e',
+      q21: 'a1tm0f', q22: 'v1wo0j', q23: 'c1qj0z', q24: 'i1kn0b', q25: 'l1xp0f', q26: 'b1ty0o', q27: 'o1ck0u', q28: 'f1xr0c', q29: 'e1gm0p', q30: 't1wp0x',
+      q31: 'k2yx0v', q32: 'd2qe0u', q33: 'x2nr0v', q34: 'r2ay0j', q35: 'p2xe0t', q36: 'm2sd0r', q37: 'h2wi0p', q38: 'c2fd0x', q39: 'n2wo0x', q40: 'z2vj0a',
+      q41: 'l2hm0q', q42: 'f2ko0x', q43: 's2lo0v', q44: 'w2bp0i', q45: 'y2pe0o', q46: 'r3oe0p', q47: 's3iu0v', q48: 't3en0q', q49: 'n3og0u', q50: 'm3in0s',
+      q51: 'p3ks0a'
+    });
+    let scanTimer;
+    const codeReader = new ZXing.BrowserQRCodeReader();
+    function startScanTimer() {
+      scanTimer = setTimeout(() => {
+        location.reload();
+      }, 300000);
+    }
+    function resetScanTimer() {
+      clearTimeout(scanTimer);
+      startScanTimer();
+    }
+    firebase.database().ref('QRs').child('qrs').once('value').then(function (snapshot) {
+      const round0 = [snapshot.val().r0q1, snapshot.val().r0q2, snapshot.val().r0q3, snapshot.val().r0q4, snapshot.val().r0q5, snapshot.val().r0q6];
+      const password = ['pass1', 'pass2', 'pass3', 'pass4', 'pass5', 'pass6', 'pass7', 'pass8', 'pass9', 'pass10', 'pass11', 'pass12'];
+      const round1 = [snapshot.val().r1q1, snapshot.val().r1q2, snapshot.val().r1q3, snapshot.val().r1q4, snapshot.val().r1q5, snapshot.val().r1q6, snapshot.val().r1q7, snapshot.val().r1q8]; // 3 
+      const round1teams = ['pass13', 'pass14'];
+      const round1teamssplice = []; // 6 + 2
+      const round2 = [snapshot.val().r2q1, snapshot.val().r2q2, snapshot.val().r2q3, snapshot.val().r2q4];
+      const round2teams = []; // 4
+      const round3 = [snapshot.val().r3q1, snapshot.val().r3q2];
+      const round3teams = []; // 2
+      const round4 = [snapshot.val().q1, snapshot.val().q2, snapshot.val().q3, snapshot.val().q4, snapshot.val().q5, snapshot.val().q6, snapshot.val().q7, snapshot.val().q8, snapshot.val().q9, snapshot.val().q10, snapshot.val().q11, snapshot.val().q12, snapshot.val().q13, snapshot.val().q14, snapshot.val().q15, snapshot.val().q16, snapshot.val().q17, snapshot.val().q18, snapshot.val().q19, snapshot.val().q20, snapshot.val().q21, snapshot.val().q22, snapshot.val().q23, snapshot.val().q24, snapshot.val().q25, snapshot.val().q26, snapshot.val().q27, snapshot.val().q28, snapshot.val().q29, snapshot.val().q30, snapshot.val().q31, snapshot.val().q32, snapshot.val().q33, snapshot.val().q34, snapshot.val().q35, snapshot.val().q36, snapshot.val().q37, snapshot.val().q38, snapshot.val().q39, snapshot.val().q40, snapshot.val().q41, snapshot.val().q42, snapshot.val().q43, snapshot.val().q44, snapshot.val().q45, snapshot.val().q46, snapshot.val().q47, snapshot.val().q48, snapshot.val().q49, snapshot.val().q50, snapshot.val().q51];
+      const huntstarttime = '2023-03-22T22:17:30+05:30';
+      const round0endtime = '2023-03-22T22:18:00+05:30';
+      const round1endtime = '2023-03-22T22:18:20+05:30';
+      const round2endtime = '2023-03-22T22:18:40+05:30';
+      const round3endtime = '2023-03-22T22:19:10+05:30';
+      const round4endtime = '2023-03-22T22:19:30+05:30';
+      let clue;
+      if (document.body.getBoundingClientRect().height > document.body.getBoundingClientRect().width) {
+        document.getElementById('preview').style.maxHeight = '80vh';
+        document.getElementById('preview').style.width = '80vw';
+      } else if (document.body.getBoundingClientRect().height < document.body.getBoundingClientRect().width) {
+        document.getElementById('preview').style.height = '80vh';
+        document.getElementById('preview').style.maxWidth = '80vw';
+      } else if (document.body.getBoundingClientRect().height = document.body.getBoundingClientRect().width) {
+        document.getElementById('preview').style.height = '80vh';
+        document.getElementById('preview').style.width = '80vw';
+      }
+      codeReader.getVideoInputDevices().then(videoInputDevices => {
+        let deviceId = localStorage.getItem('defaultDeviceId');
+        const rearCamera = videoInputDevices.find(device => {
+          if (device.label.includes('back') || device.label.includes('rear')) {
+            deviceId = device.deviceId;
+            localStorage.setItem('defaultDeviceId', deviceId);
+            return true;
+          }
+          return false;
         });
-        firebase.database().ref('Clues').child('round1').set({ // 8 (4 Photo Clue)
-            clue1: 'photo1',
-            clue2: 'hi',
-            clue3: 'hi',
-            clue4: 'hi'
-        });
-        firebase.database().ref('Clues').child('round2').set({ // 4 (2 video links)
-            clue1: 'video1',
-            clue2: 'hi'
-        });
-        firebase.database().ref('QRs').child('qrs').set({ // round 0
-            r0q1: 'q1',
-            r0q2: 'hii',
-            r0q3: 'hiii',
-            r0q4: 'hi',
-            r0q5: 'hi',
-            r0q6: 'hi',
-            // round 1
-            r1q1: 'q2',
-            r1q2: 'hi',
-            r1q3: 'hi',
-            r1q4: 'hi',
-            r1q5: 'hi',
-            r1q6: 'hi',
-            r1q7: 'hi',
-            r1q8: 'hi',
-            // round 2
-            r2q1: 'q3',
-            r2q2: 'hi',
-            r2q3: 'hi',
-            r2q4: 'hi',
-            // round 3
-            r3q1: 'q4',
-            r3q2: 'hi',
-            // round 4
-            q1: 'abc10', q2: '56abc', q3: '', q4: '', q5: '', q6: '', q7: '', q8: '', q9: '', q10: '', q11: '', q12: '', q13: '', q14: '', q15: '', q16: '', q17: '', q18: '', q19: '', q20: '', q21: '', q22: '', q23: '', q24: '', q25: '', q26: '', q27: '', q28: '', q29: '', q30: '', q31: '', q32: '', q33: '', q34: '', q35: '', q36: '', q37: '', q38: '', q39: '', q40: '', q41: '', q42: '', q43: '', q44: '', q45: '', q46: '', q47: '', q48: '', q49: '', q50: '', q51: ''
-        });
-        let scanTimer;
-        const codeReader = new ZXing.BrowserQRCodeReader();
-        function startScanTimer() {
-            scanTimer = setTimeout(() => {
-                location.reload();
-            }, 300000);
+        if (!rearCamera) {
+          deviceId = localStorage.getItem('defaultDeviceId') || videoInputDevices[0].deviceId;
+          document.getElementById('preview').style.transform = 'scaleX(-1)';
         }
-        function resetScanTimer() {
-            clearTimeout(scanTimer);
-            startScanTimer();
-        }
-        firebase.database().ref('QRs').child('qrs').once('value').then(function (snapshot) {
-            const round0 = [snapshot.val().r0q1, snapshot.val().r0q2, snapshot.val().r0q3, snapshot.val().r0q4, snapshot.val().r0q5, snapshot.val().r0q6];
-            const password = ['pass1', 'pass2', 'pass3', 'pass4', 'pass5', 'pass6', 'pass7', 'pass8', 'pass9', 'pass10', 'pass11', 'pass12'];
-            const round1 = [snapshot.val().r1q1, snapshot.val().r1q2, snapshot.val().r1q3, snapshot.val().r1q4, snapshot.val().r1q5, snapshot.val().r1q6, snapshot.val().r1q7, snapshot.val().r1q8]; // 3 
-            const round1teams = ['pass13', 'pass14'];
-            const round1teamssplice = []; // 6 + 2
-            const round2 = [snapshot.val().r2q1, snapshot.val().r2q2, snapshot.val().r2q3, snapshot.val().r2q4];
-            const round2teams = []; // 4
-            const round3 = [snapshot.val().r3q1, snapshot.val().r3q2];
-            const round3teams = []; // 2
-            const round4 = [snapshot.val().q1, snapshot.val().q2, snapshot.val().q3, snapshot.val().q4, snapshot.val().q5, snapshot.val().q6, snapshot.val().q7, snapshot.val().q8, snapshot.val().q9, snapshot.val().q10, snapshot.val().q11, snapshot.val().q12, snapshot.val().q13, snapshot.val().q14, snapshot.val().q15, snapshot.val().q16, snapshot.val().q17, snapshot.val().q18, snapshot.val().q19, snapshot.val().q20, snapshot.val().q21, snapshot.val().q22, snapshot.val().q23, snapshot.val().q24, snapshot.val().q25, snapshot.val().q26, snapshot.val().q27, snapshot.val().q28, snapshot.val().q29, snapshot.val().q30, snapshot.val().q31, snapshot.val().q32, snapshot.val().q33, snapshot.val().q34, snapshot.val().q35, snapshot.val().q36, snapshot.val().q37, snapshot.val().q38, snapshot.val().q39, snapshot.val().q40, snapshot.val().q41, snapshot.val().q42, snapshot.val().q43, snapshot.val().q44, snapshot.val().q45, snapshot.val().q46, snapshot.val().q47, snapshot.val().q48, snapshot.val().q49, snapshot.val().q50, snapshot.val().q51];
-            const huntstarttime = '2023-03-22T22:17:30+05:30';
-            const round0endtime = '2023-03-22T22:18:00+05:30';
-            const round1endtime = '2023-03-22T22:18:20+05:30';
-            const round2endtime = '2023-03-22T22:18:40+05:30';
-            const round3endtime = '2023-03-22T22:19:10+05:30';
-            const round4endtime = '2023-03-22T22:19:30+05:30';
-            let clue;
-            if (document.body.getBoundingClientRect().height > document.body.getBoundingClientRect().width) {
-                document.getElementById('preview').style.maxHeight = '80vh';
-                document.getElementById('preview').style.width = '80vw';
-            } else if (document.body.getBoundingClientRect().height < document.body.getBoundingClientRect().width) {
-                document.getElementById('preview').style.height = '80vh';
-                document.getElementById('preview').style.maxWidth = '80vw';
-            } else if (document.body.getBoundingClientRect().height = document.body.getBoundingClientRect().width) {
-                document.getElementById('preview').style.height = '80vh';
-                document.getElementById('preview').style.width = '80vw';
-            }
-            codeReader.getVideoInputDevices().then(videoInputDevices => {
-                let deviceId = localStorage.getItem('defaultDeviceId');
-                const rearCamera = videoInputDevices.find(device => {
-                    if (device.label.includes('back') || device.label.includes('rear')) {
-                        deviceId = device.deviceId;
-                        localStorage.setItem('defaultDeviceId', deviceId);
-                        return true;
-                    }
-                    return false;
-                });
-                if (!rearCamera) {
-                    deviceId = localStorage.getItem('defaultDeviceId') || videoInputDevices[0].deviceId;
-                    document.getElementById('preview').style.transform = 'scaleX(-1)';
-                }
-                codeReader.decodeFromInputVideoDevice(deviceId, 'preview')
-                    .then(result => {
-                        resetScanTimer();
-                        if (round0.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round0endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(huntstarttime)) {
-                            var database = firebase.database().ref('round0db');
-                            const userInput = prompt("Please enter your group passkey: ");
-                            const resulttosave = result.text;
-                            const index = round0.indexOf(resulttosave);
-                            const allowedindex1 = index * 2;
-                            const allowedindex2 = (index * 2) + 1;
-                            if (password.includes(userInput.toLowerCase())) {
-                                if (userInput.toLowerCase() == password[allowedindex1] || userInput.toLowerCase() == password[allowedindex2]) {
-                                    database.child(resulttosave).once('value').then(function (snapshot) {
-                                        database.child(resulttosave).set({
-                                            passkey: userInput.toLowerCase(),
-                                            time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
-                                        });
-                                        firebase.database().ref('Clues').child('round0').once('value').then(function (snapshot) {
-                                            document.getElementById('preview').style.display = 'none';
-                                            switch (index) {
-                                                // 6 google maps links
-                                                case 0:
-                                                    clue = snapshot.val().clue1;
-                                                    break;
-                                                case 1:
-                                                    clue = snapshot.val().clue2;
-                                                    break;
-                                                case 2:
-                                                    clue = snapshot.val().clue3;
-                                                    break;
-                                                case 3:
-                                                    clue = snapshot.val().clue4;
-                                                    break;
-                                                case 4:
-                                                    clue = snapshot.val().clue5;
-                                                    break;
-                                                case 5:
-                                                    clue = snapshot.val().clue6;
-                                                    break;
-                                            }
-                                            document.getElementById('output').innerHTML = '<div id=\'iframecontainer\'><iframe id="iframe" src=\'' + clue + '\'></iframe></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
-                                            document.getElementById('output').style.display = 'flex';
-                                        });
-                                    });
-                                } else {
-                                    if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
-                                        window.location.reload();
-                                    }
-                                }
-                            } else {
-                                if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
-                                    window.location.reload();
-                                }
-                            }
-                        } else if (round1.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round1endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round0endtime)) {
-                            var database = firebase.database().ref('round1db');
-                            const userInput = prompt("Please enter your group passkey: ");
-                            const resulttosave = result.text;
-                            const index = round1.indexOf(resulttosave);
-                            const allowedindex1 = index * 2;
-                            const allowedindex2 = (index * 2) + 1;
-                            if (password.includes(userInput.toLowerCase())) {
-                                if (userInput.toLowerCase() == password[allowedindex1] || userInput.toLowerCase() == password[allowedindex2]) {
-                                    database.child(resulttosave).once('value').then(function (snapshot) {
-                                        if (snapshot.exists()) {
-                                            var savedpasskey = snapshot.val().passkey;
-                                            if (savedpasskey === userInput.toLowerCase()) {
-                                                document.getElementById('preview').style.display = 'none';
-                                                firebase.database().ref('Clues').child('round1').once('value').then(function (snapshot) {
-                                                    switch (index) {
-                                                        // 6 Images (3 unique)
-                                                        case 0:
-                                                            clue = snapshot.val().clue1;
-                                                            break;
-                                                        case 1:
-                                                            clue = snapshot.val().clue1;
-                                                            break;
-                                                        case 2:
-                                                            clue = snapshot.val().clue2;
-                                                            break;
-                                                        case 3:
-                                                            clue = snapshot.val().clue2;
-                                                            break;
-                                                        case 4:
-                                                            clue = snapshot.val().clue3;
-                                                            break;
-                                                        case 5:
-                                                            clue = snapshot.val().clue3;
-                                                            break;
-                                                        case 6:
-                                                            clue = snapshot.val().clue4;
-                                                            break;
-                                                        case 7:
-                                                            clue = snapshot.val().clue4;
-                                                            break;
-                                                    }
-                                                    document.getElementById('output').innerHTML = '<div id=\'imagecontainer\'><img id="image" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
-                                                    document.getElementById('output').style.display = 'flex';
-                                                });
-                                            } else {
-                                                alert("You are late. \nReport to staff. Your team has been eliminated.");
-                                                document.getElementById('preview').style.display = 'none';
-                                                document.getElementById('output').style.display = 'none';
-                                                document.getElementById('thankyou').style.display = 'flex';
-                                            }
-                                        } else {
-                                            database.child(resulttosave).set({
-                                                passkey: userInput.toLowerCase(),
-                                                time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
-                                            });
-                                            document.getElementById('preview').style.display = 'none';
-                                            firebase.database().ref('Clues').child('round1').once('value').then(function (snapshot) {
-                                                switch (index) {
-                                                    // 6 + 2 Images (3 + 1 unique)
-                                                    case 0:
-                                                        clue = snapshot.val().clue1;
-                                                        break;
-                                                    case 1:
-                                                        clue = snapshot.val().clue1;
-                                                        break;
-                                                    case 2:
-                                                        clue = snapshot.val().clue2;
-                                                        break;
-                                                    case 3:
-                                                        clue = snapshot.val().clue2;
-                                                        break;
-                                                    case 4:
-                                                        clue = snapshot.val().clue3;
-                                                        break;
-                                                    case 5:
-                                                        clue = snapshot.val().clue3;
-                                                        break;
-                                                    case 6:
-                                                        clue = snapshot.val().clue4;
-                                                        break;
-                                                    case 7:
-                                                        clue = snapshot.val().clue4;
-                                                        break;
-                                                }
-                                                document.getElementById('output').innerHTML = '<div id=\'imagecontainer\'><img id="image" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
-                                                document.getElementById('output').style.display = 'flex';
-                                            });
-                                        }
-                                    });
-                                } else {
-                                    if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
-                                        window.location.reload();
-                                    }
-                                }
-                            } else {
-                                if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
-                                    window.location.reload();
-                                }
-                            }
-                        } else if (round2.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round2endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round1endtime)) {
-                            var database = firebase.database().ref('round2db');
-                            firebase.database().ref('round1db').once('value').then(snapshot => {
-                                try {
-                                    snapshot.forEach(childSnapshot => {
-                                        const round1pass = childSnapshot.child("passkey").val();
-                                        round1teamssplice.push(round1pass);
-                                    });
-                                    round1teams.splice(0, 0, ...round1teamssplice);
-                                    console.log(round1teams);
-                                    const userInput = prompt("Please enter your group passkey: ");
-                                    const resulttosave = result.text;
-                                    const index = round2.indexOf(resulttosave);
-                                    const allowedindex1 = index * 2;
-                                    const allowedindex2 = (index * 2) + 1;
-                                    if (round1teams.includes(userInput.toLowerCase())) {
-                                        if (userInput.toLowerCase() == round1teams[allowedindex1] || userInput.toLowerCase() == round1teams[allowedindex2]) {
-                                            database.child(resulttosave).once('value').then(function (snapshot) {
-                                                if (snapshot.exists()) {
-                                                    var savedpasskey = snapshot.val().passkey;
-                                                    if (savedpasskey === userInput.toLowerCase()) {
-                                                        document.getElementById('preview').style.display = 'none';
-                                                        firebase.database().ref('Clues').child('round2').once('value').then(function (snapshot) {
-                                                            switch (index) {
-                                                                case 0:
-                                                                    clue = snapshot.val().clue1;
-                                                                    break;
-                                                                case 1:
-                                                                    clue = snapshot.val().clue1;
-                                                                    break;
-                                                                case 2:
-                                                                    clue = snapshot.val().clue2;
-                                                                    break;
-                                                                case 3:
-                                                                    clue = snapshot.val().clue2;
-                                                                    break;
-                                                            }
-                                                            document.getElementById('output').innerHTML = '<div id=\'videocontainer\'><video id="video" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
-                                                            document.getElementById('output').style.display = 'flex';
-                                                        });
-                                                    } else {
-                                                        alert("You are late. \nReport to staff. Your team has been eliminated.");
-                                                        document.getElementById('preview').style.display = 'none';
-                                                        document.getElementById('output').style.display = 'none';
-                                                        document.getElementById('thankyou').style.display = 'flex';
-                                                    }
-                                                } else {
-                                                    database.child(resulttosave).set({
-                                                        passkey: userInput.toLowerCase(),
-                                                        time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
-                                                    });
-                                                    document.getElementById('preview').style.display = 'none';
-                                                    firebase.database().ref('Clues').child('round2').once('value').then(function (snapshot) {
-                                                        switch (index) {
-                                                            case 0:
-                                                                clue = snapshot.val().clue1;
-                                                                break;
-                                                            case 1:
-                                                                clue = snapshot.val().clue1;
-                                                                break;
-                                                            case 2:
-                                                                clue = snapshot.val().clue2;
-                                                                break;
-                                                            case 3:
-                                                                clue = snapshot.val().clue2;
-                                                                break;
-                                                        }
-                                                        document.getElementById('output').innerHTML = '<div id=\'videocontainer\'><video id="video" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
-                                                        document.getElementById('output').style.display = 'flex';
-                                                    });
-                                                }
-                                            });
-                                        } else {
-                                            if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
-                                                window.location.reload();
-                                            }
-                                        }
-                                    } else if (round1teams.includes(userInput.toLowerCase()) == false && password.includes(userInput.toLowerCase()) == true) {
-                                        if (!window.alert("Incorrect passkey. \nYour team has been eliminated.")) {
-                                            window.location.reload();
-                                        }
-                                    } else {
-                                        if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
-                                            window.location.reload();
-                                        }
-                                    }
-                                } catch (error) {
-                                    console.error('Error retrieving data from Firebase: ', error);
-                                }
-                            });
-                        } else if (round3.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round3endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round2endtime)) {
-                            var database = firebase.database().ref('round3db');
-                            firebase.database().ref('round2db').once('value').then(snapshot => {
-                                try {
-                                    snapshot.forEach(childSnapshot => {
-                                        const round2pass = childSnapshot.child("passkey").val();
-                                        round2teams.push(round2pass);
-                                    });
-                                    console.log(round2teams);
-                                    const userInput = prompt("Please enter your group passkey: ");
-                                    const resulttosave = result.text;
-                                    const index = round3.indexOf(resulttosave);
-                                    const allowedindex1 = index * 2;
-                                    const allowedindex2 = (index * 2) + 1;
-                                    if (round2teams.includes(userInput.toLowerCase())) {
-                                        if (userInput.toLowerCase() == round2teams[allowedindex1] || userInput.toLowerCase() == round2teams[allowedindex2]) {
-                                            database.child(resulttosave).once('value').then(function (snapshot) {
-                                                if (snapshot.exists()) {
-                                                    var savedpasskey = snapshot.val().passkey;
-                                                    if (savedpasskey === userInput.toLowerCase()) {
-                                                        document.getElementById('preview').style.display = 'none';
-                                                        switch (index) {
-                                                            case 0:
-                                                                document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
-                                                                break;
-                                                            case 1:
-                                                                document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
-                                                                break;
-                                                        }
-                                                        document.getElementById('output').style.display = 'flex';
-                                                    } else {
-                                                        alert("You are late. \nReport to staff. Your team has been eliminated.");
-                                                        document.getElementById('preview').style.display = 'none';
-                                                        document.getElementById('output').style.display = 'none';
-                                                        document.getElementById('thankyou').style.display = 'flex';
-                                                    }
-                                                } else {
-                                                    database.child(resulttosave).set({
-                                                        passkey: userInput.toLowerCase(),
-                                                        time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
-                                                    });
-                                                    document.getElementById('preview').style.display = 'none';
-                                                    switch (index) {
-                                                        case 0:
-                                                            document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
-                                                            break;
-                                                        case 1:
-                                                            document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
-                                                            break;
-                                                    }
-                                                    document.getElementById('output').style.display = 'flex';
-                                                }
-                                            });
-                                        } else {
-                                            if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
-                                                window.location.reload();
-                                            }
-                                        }
-                                    } else if (round1teams.includes(userInput.toLowerCase()) == false && password.includes(userInput.toLowerCase()) == true) {
-                                        if (!window.alert("Incorrect passkey. \nYour team has been eliminated.")) {
-                                            window.location.reload();
-                                        }
-                                    } else {
-                                        if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
-                                            window.location.reload();
-                                        }
-                                    }
-                                } catch (error) {
-                                    console.error('Error retrieving data from Firebase: ', error);
-                                }
-                            });
-                        } else if (round4.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round4endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round3endtime)) {
-                            var database = firebase.database().ref('round4db');
-                            const scannedpoints = parseInt(result.text.match(/\d+/g).join(''));
-                            firebase.database().ref('round3db').once('value').then(snapshot => {
-                                try {
-                                    snapshot.forEach(childSnapshot => {
-                                        const round2pass = childSnapshot.child("passkey").val();
-                                        round3teams.push(round2pass);
-                                    });
-                                    console.log(round3teams);
-                                    const userInput = prompt("Please enter your group passkey: ");
-                                    const resulttosave = result.text;
-                                    const index = round4.indexOf(resulttosave);
-                                    if (round3teams.includes(userInput.toLowerCase())) {
-                                        if (userInput.toLowerCase() == round3teams[0] || userInput.toLowerCase() == round3teams[1]) {
-                                            database.child(resulttosave).once('value').then(function (snapshot) {
-                                                if (snapshot.exists()) {
-                                                    if (!window.alert("This QR is already scanned.")) {
-                                                        window.location.reload();
-                                                    }
-                                                } else {
-                                                    database.child(userInput.toLowerCase()).once('value').then(function (snapshot) {
-                                                        if (snapshot.val() !== null) {
-                                                            const oldpoints = snapshot.val().points;
-                                                            const totalpoints = oldpoints + scannedpoints;
-                                                            database.child(userInput.toLowerCase()).set({
-                                                                points: totalpoints
-                                                            });
-                                                            database.child(resulttosave).set({
-                                                                passkey: userInput.toLowerCase(),
-                                                                time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
-                                                            });
-                                                        } else {
-                                                            const oldpoints = 0;
-                                                            const totalpoints = oldpoints + scannedpoints;
-                                                            database.child(userInput.toLowerCase()).set({
-                                                                points: totalpoints
-                                                            });
-                                                            database.child(resulttosave).set({
-                                                                passkey: userInput.toLowerCase(),
-                                                                time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
-                                                            });
-                                                        }
-                                                        document.getElementById('preview').style.display = 'none';
-                                                        document.getElementById('output').innerHTML = 'Your team just scanned and recieved ' + scannedpoints + ' points.';
-                                                        document.getElementById('output').style.display = 'flex';
-                                                    });
-                                                }
-                                            });
-                                        } else {
-                                            if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
-                                                window.location.reload();
-                                            }
-                                        }
-                                    } else if (round1teams.includes(userInput.toLowerCase()) == false && password.includes(userInput.toLowerCase()) == true) {
-                                        if (!window.alert("Incorrect passkey. \nYour team has been eliminated.")) {
-                                            window.location.reload();
-                                        }
-                                    } else {
-                                        if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
-                                            window.location.reload();
-                                        }
-                                    }
-                                } catch (error) {
-                                    console.error('Error retrieving data from Firebase: ', error);
-                                }
-                            });
-                        } else if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round4endtime)) {
-                            if (!window.alert("This QR hunt has been ended.")) {
-                                window.location.reload();
-                            }
-                        } else {
-                            if (!window.alert("Detected QR is not a part of this QR hunt.")) {
-                                window.location.reload();
-                            }
-                        }
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        if (err.message == "Permission denied" || err.message == "Permission dismissed") {
-                            if (!window.alert('Missing the permission to use camera. Can\'t proceed further.')) {
-                                window.location.reload();
-                            }
-                        } else {
-                            window.alert('This is an unanticipated error. Please report to staff. \n' + err.message + '.');
-                        }
-                        resetScanTimer();
+        codeReader.decodeFromInputVideoDevice(deviceId, 'preview')
+          .then(result => {
+            resetScanTimer();
+            if (round0.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round0endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(huntstarttime)) {
+              var database = firebase.database().ref('round0db');
+              const userInput = prompt("Please enter your group passkey: ");
+              const resulttosave = result.text;
+              const index = round0.indexOf(resulttosave);
+              const allowedindex1 = index * 2;
+              const allowedindex2 = (index * 2) + 1;
+              if (password.includes(userInput.toLowerCase())) {
+                if (userInput.toLowerCase() == password[allowedindex1] || userInput.toLowerCase() == password[allowedindex2]) {
+                  database.child(resulttosave).once('value').then(function (snapshot) {
+                    database.child(resulttosave).set({
+                      passkey: userInput.toLowerCase(),
+                      time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
                     });
-                startScanTimer();
-            });
-        });
-    </script>
+                    firebase.database().ref('Clues').child('round0').once('value').then(function (snapshot) {
+                      document.getElementById('preview').style.display = 'none';
+                      switch (index) {
+                        // 6 google maps links
+                        case 0:
+                          clue = snapshot.val().clue1;
+                          break;
+                        case 1:
+                          clue = snapshot.val().clue2;
+                          break;
+                        case 2:
+                          clue = snapshot.val().clue3;
+                          break;
+                        case 3:
+                          clue = snapshot.val().clue4;
+                          break;
+                        case 4:
+                          clue = snapshot.val().clue5;
+                          break;
+                        case 5:
+                          clue = snapshot.val().clue6;
+                          break;
+                      }
+                      document.getElementById('output').innerHTML = '<div id=\'iframecontainer\'><iframe id="iframe" src=\'' + clue + '\'></iframe></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
+                      document.getElementById('output').style.display = 'flex';
+                    });
+                  });
+                } else {
+                  if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
+                    window.location.reload();
+                  }
+                }
+              } else {
+                if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
+                  window.location.reload();
+                }
+              }
+            } else if (round1.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round1endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round0endtime)) {
+              var database = firebase.database().ref('round1db');
+              const userInput = prompt("Please enter your group passkey: ");
+              const resulttosave = result.text;
+              const index = round1.indexOf(resulttosave);
+              const allowedindex1 = index * 2;
+              const allowedindex2 = (index * 2) + 1;
+              if (password.includes(userInput.toLowerCase())) {
+                if (userInput.toLowerCase() == password[allowedindex1] || userInput.toLowerCase() == password[allowedindex2]) {
+                  database.child(resulttosave).once('value').then(function (snapshot) {
+                    if (snapshot.exists()) {
+                      var savedpasskey = snapshot.val().passkey;
+                      if (savedpasskey === userInput.toLowerCase()) {
+                        document.getElementById('preview').style.display = 'none';
+                        firebase.database().ref('Clues').child('round1').once('value').then(function (snapshot) {
+                          switch (index) {
+                            // 6 Images (3 unique)
+                            case 0:
+                              clue = snapshot.val().clue1;
+                              break;
+                            case 1:
+                              clue = snapshot.val().clue1;
+                              break;
+                            case 2:
+                              clue = snapshot.val().clue2;
+                              break;
+                            case 3:
+                              clue = snapshot.val().clue2;
+                              break;
+                            case 4:
+                              clue = snapshot.val().clue3;
+                              break;
+                            case 5:
+                              clue = snapshot.val().clue3;
+                              break;
+                            case 6:
+                              clue = snapshot.val().clue4;
+                              break;
+                            case 7:
+                              clue = snapshot.val().clue4;
+                              break;
+                          }
+                          document.getElementById('output').innerHTML = '<div id=\'imagecontainer\'><img id="image" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
+                          document.getElementById('output').style.display = 'flex';
+                        });
+                      } else {
+                        alert("You are late. \nReport to staff. Your team has been eliminated.");
+                        document.getElementById('preview').style.display = 'none';
+                        document.getElementById('output').style.display = 'none';
+                        document.getElementById('thankyou').style.display = 'flex';
+                      }
+                    } else {
+                      database.child(resulttosave).set({
+                        passkey: userInput.toLowerCase(),
+                        time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+                      });
+                      document.getElementById('preview').style.display = 'none';
+                      firebase.database().ref('Clues').child('round1').once('value').then(function (snapshot) {
+                        switch (index) {
+                          // 6 + 2 Images (3 + 1 unique)
+                          case 0:
+                            clue = snapshot.val().clue1;
+                            break;
+                          case 1:
+                            clue = snapshot.val().clue1;
+                            break;
+                          case 2:
+                            clue = snapshot.val().clue2;
+                            break;
+                          case 3:
+                            clue = snapshot.val().clue2;
+                            break;
+                          case 4:
+                            clue = snapshot.val().clue3;
+                            break;
+                          case 5:
+                            clue = snapshot.val().clue3;
+                            break;
+                          case 6:
+                            clue = snapshot.val().clue4;
+                            break;
+                          case 7:
+                            clue = snapshot.val().clue4;
+                            break;
+                        }
+                        document.getElementById('output').innerHTML = '<div id=\'imagecontainer\'><img id="image" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
+                        document.getElementById('output').style.display = 'flex';
+                      });
+                    }
+                  });
+                } else {
+                  if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
+                    window.location.reload();
+                  }
+                }
+              } else {
+                if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
+                  window.location.reload();
+                }
+              }
+            } else if (round2.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round2endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round1endtime)) {
+              var database = firebase.database().ref('round2db');
+              firebase.database().ref('round1db').once('value').then(snapshot => {
+                try {
+                  snapshot.forEach(childSnapshot => {
+                    const round1pass = childSnapshot.child("passkey").val();
+                    round1teamssplice.push(round1pass);
+                  });
+                  round1teams.splice(0, 0, ...round1teamssplice);
+                  console.log(round1teams);
+                  const userInput = prompt("Please enter your group passkey: ");
+                  const resulttosave = result.text;
+                  const index = round2.indexOf(resulttosave);
+                  const allowedindex1 = index * 2;
+                  const allowedindex2 = (index * 2) + 1;
+                  if (round1teams.includes(userInput.toLowerCase())) {
+                    if (userInput.toLowerCase() == round1teams[allowedindex1] || userInput.toLowerCase() == round1teams[allowedindex2]) {
+                      database.child(resulttosave).once('value').then(function (snapshot) {
+                        if (snapshot.exists()) {
+                          var savedpasskey = snapshot.val().passkey;
+                          if (savedpasskey === userInput.toLowerCase()) {
+                            document.getElementById('preview').style.display = 'none';
+                            firebase.database().ref('Clues').child('round2').once('value').then(function (snapshot) {
+                              switch (index) {
+                                case 0:
+                                  clue = snapshot.val().clue1;
+                                  break;
+                                case 1:
+                                  clue = snapshot.val().clue1;
+                                  break;
+                                case 2:
+                                  clue = snapshot.val().clue2;
+                                  break;
+                                case 3:
+                                  clue = snapshot.val().clue2;
+                                  break;
+                              }
+                              document.getElementById('output').innerHTML = '<div id=\'iframecontainer\'><iframe id="iframe" src=\'' + clue + '\'></iframe></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
+                              document.getElementById('output').style.display = 'flex';
+                            });
+                          } else {
+                            alert("You are late. \nReport to staff. Your team has been eliminated.");
+                            document.getElementById('preview').style.display = 'none';
+                            document.getElementById('output').style.display = 'none';
+                            document.getElementById('thankyou').style.display = 'flex';
+                          }
+                        } else {
+                          database.child(resulttosave).set({
+                            passkey: userInput.toLowerCase(),
+                            time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+                          });
+                          document.getElementById('preview').style.display = 'none';
+                          firebase.database().ref('Clues').child('round2').once('value').then(function (snapshot) {
+                            switch (index) {
+                              case 0:
+                                clue = snapshot.val().clue1;
+                                break;
+                              case 1:
+                                clue = snapshot.val().clue1;
+                                break;
+                              case 2:
+                                clue = snapshot.val().clue2;
+                                break;
+                              case 3:
+                                clue = snapshot.val().clue2;
+                                break;
+                            }
+                            document.getElementById('output').innerHTML = '<div id=\'iframecontainer\'><iframe id="iframe" src=\'' + clue + '\'></iframe></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
+                            document.getElementById('output').style.display = 'flex';
+                          });
+                        }
+                      });
+                    } else {
+                      if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
+                        window.location.reload();
+                      }
+                    }
+                  } else if (round1teams.includes(userInput.toLowerCase()) == false && password.includes(userInput.toLowerCase()) == true) {
+                    if (!window.alert("Incorrect passkey. \nYour team has been eliminated.")) {
+                      window.location.reload();
+                    }
+                  } else {
+                    if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
+                      window.location.reload();
+                    }
+                  }
+                } catch (error) {
+                  console.error('Error retrieving data from Firebase: ', error);
+                }
+              });
+            } else if (round3.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round3endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round2endtime)) {
+              var database = firebase.database().ref('round3db');
+              firebase.database().ref('round2db').once('value').then(snapshot => {
+                try {
+                  snapshot.forEach(childSnapshot => {
+                    const round2pass = childSnapshot.child("passkey").val();
+                    round2teams.push(round2pass);
+                  });
+                  console.log(round2teams);
+                  const userInput = prompt("Please enter your group passkey: ");
+                  const resulttosave = result.text;
+                  const index = round3.indexOf(resulttosave);
+                  const allowedindex1 = index * 2;
+                  const allowedindex2 = (index * 2) + 1;
+                  if (round2teams.includes(userInput.toLowerCase())) {
+                    if (userInput.toLowerCase() == round2teams[allowedindex1] || userInput.toLowerCase() == round2teams[allowedindex2]) {
+                      database.child(resulttosave).once('value').then(function (snapshot) {
+                        if (snapshot.exists()) {
+                          var savedpasskey = snapshot.val().passkey;
+                          if (savedpasskey === userInput.toLowerCase()) {
+                            document.getElementById('preview').style.display = 'none';
+                            switch (index) {
+                              case 0:
+                                document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
+                                break;
+                              case 1:
+                                document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
+                                break;
+                            }
+                            document.getElementById('output').style.display = 'flex';
+                          } else {
+                            alert("You are late. \nReport to staff. Your team has been eliminated.");
+                            document.getElementById('preview').style.display = 'none';
+                            document.getElementById('output').style.display = 'none';
+                            document.getElementById('thankyou').style.display = 'flex';
+                          }
+                        } else {
+                          database.child(resulttosave).set({
+                            passkey: userInput.toLowerCase(),
+                            time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+                          });
+                          document.getElementById('preview').style.display = 'none';
+                          switch (index) {
+                            case 0:
+                              document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
+                              break;
+                            case 1:
+                              document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
+                              break;
+                          }
+                          document.getElementById('output').style.display = 'flex';
+                        }
+                      });
+                    } else {
+                      if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
+                        window.location.reload();
+                      }
+                    }
+                  } else if (round1teams.includes(userInput.toLowerCase()) == false && password.includes(userInput.toLowerCase()) == true) {
+                    if (!window.alert("Incorrect passkey. \nYour team has been eliminated.")) {
+                      window.location.reload();
+                    }
+                  } else {
+                    if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
+                      window.location.reload();
+                    }
+                  }
+                } catch (error) {
+                  console.error('Error retrieving data from Firebase: ', error);
+                }
+              });
+            } else if (round4.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round4endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round3endtime)) {
+              var database = firebase.database().ref('round4db');
+              const scannedpoints = parseInt(result.text.match(/\d+/g).join(''));
+              firebase.database().ref('round3db').once('value').then(snapshot => {
+                try {
+                  snapshot.forEach(childSnapshot => {
+                    const round2pass = childSnapshot.child("passkey").val();
+                    round3teams.push(round2pass);
+                  });
+                  console.log(round3teams);
+                  const userInput = prompt("Please enter your group passkey: ");
+                  const resulttosave = result.text;
+                  const index = round4.indexOf(resulttosave);
+                  if (round3teams.includes(userInput.toLowerCase())) {
+                    if (userInput.toLowerCase() == round3teams[0] || userInput.toLowerCase() == round3teams[1]) {
+                      database.child(resulttosave).once('value').then(function (snapshot) {
+                        if (snapshot.exists()) {
+                          if (!window.alert("This QR is already scanned.")) {
+                            window.location.reload();
+                          }
+                        } else {
+                          database.child(userInput.toLowerCase()).once('value').then(function (snapshot) {
+                            if (snapshot.val() !== null) {
+                              const oldpoints = snapshot.val().points;
+                              const totalpoints = oldpoints + scannedpoints;
+                              database.child(userInput.toLowerCase()).set({
+                                points: totalpoints
+                              });
+                              database.child(resulttosave).set({
+                                passkey: userInput.toLowerCase(),
+                                time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+                              });
+                            } else {
+                              const oldpoints = 0;
+                              const totalpoints = oldpoints + scannedpoints;
+                              database.child(userInput.toLowerCase()).set({
+                                points: totalpoints
+                              });
+                              database.child(resulttosave).set({
+                                passkey: userInput.toLowerCase(),
+                                time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+                              });
+                            }
+                            document.getElementById('preview').style.display = 'none';
+                            document.getElementById('output').innerHTML = 'Your team just scanned and recieved ' + scannedpoints + ' points.';
+                            document.getElementById('output').style.display = 'flex';
+                          });
+                        }
+                      });
+                    } else {
+                      if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
+                        window.location.reload();
+                      }
+                    }
+                  } else if (round1teams.includes(userInput.toLowerCase()) == false && password.includes(userInput.toLowerCase()) == true) {
+                    if (!window.alert("Incorrect passkey. \nYour team has been eliminated.")) {
+                      window.location.reload();
+                    }
+                  } else {
+                    if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
+                      window.location.reload();
+                    }
+                  }
+                } catch (error) {
+                  console.error('Error retrieving data from Firebase: ', error);
+                }
+              });
+            } else if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round4endtime)) {
+              if (!window.alert("This QR hunt has been ended.")) {
+                window.location.reload();
+              }
+            } else {
+              if (!window.alert("Detected QR is not a part of this QR hunt.")) {
+                window.location.reload();
+              }
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            if (err.message == "Permission denied" || err.message == "Permission dismissed") {
+              if (!window.alert('Missing the permission to use camera. Can\'t proceed further.')) {
+                window.location.reload();
+              }
+            } else {
+              window.alert('This is an unanticipated error. Please report to staff. \n' + err.message + '.');
+            }
+            resetScanTimer();
+          });
+        startScanTimer();
+      });
+    });
+  </script>
 
 </body>
 
