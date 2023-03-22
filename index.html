@@ -349,14 +349,14 @@
                     });
                   });
                 } else {
-                  if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
-                    window.location.reload();
-                  }
+                  document.getElementById('output').innerHTML = '<h2>This isn\'t your QR. Put it back.<br>If you think this is a mistake, recheck passkey or contact staff.</h2>';
+                  document.getElementById('output').style.display = 'flex';
+                  document.getElementById('preview').style.display = 'none';
                 }
               } else {
-                if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
-                  window.location.reload();
-                }
+                document.getElementById('output').innerHTML = '<h2>Incorrect passkey.<br>Try again or contact the staff if any issue persists.</h2>';
+                document.getElementById('output').style.display = 'flex';
+                document.getElementById('preview').style.display = 'none';
               }
             } else if (round1.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round1endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round0endtime)) {
               var database = firebase.database().ref('round1db');
@@ -404,10 +404,9 @@
                           document.getElementById('output').style.display = 'flex';
                         });
                       } else {
-                        alert("You are late. \nReport to staff. Your team has been eliminated.");
+                        document.getElementById('output').innerHTML = '<h2>Your team has been eliminated.</h2>';
+                        document.getElementById('output').style.display = 'flex';
                         document.getElementById('preview').style.display = 'none';
-                        document.getElementById('output').style.display = 'none';
-                        document.getElementById('thankyou').style.display = 'flex';
                       }
                     } else {
                       database.child(resulttosave).set({
@@ -449,14 +448,14 @@
                     }
                   });
                 } else {
-                  if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
-                    window.location.reload();
-                  }
+                  document.getElementById('output').innerHTML = '<h2>This isn\'t your QR. Put it back.<br>If you think this is a mistake, recheck passkey or contact staff.</h2>';
+                  document.getElementById('output').style.display = 'flex';
+                  document.getElementById('preview').style.display = 'none';
                 }
               } else {
-                if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
-                  window.location.reload();
-                }
+                document.getElementById('output').innerHTML = '<h2>Incorrect passkey.<br>Try again or contact the staff if any issue persists.</h2>';
+                document.getElementById('output').style.display = 'flex';
+                document.getElementById('preview').style.display = 'none';
               }
             } else if (round2.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round2endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round1endtime)) {
               var database = firebase.database().ref('round2db');
@@ -499,10 +498,9 @@
                               document.getElementById('output').style.display = 'flex';
                             });
                           } else {
-                            alert("You are late. \nReport to staff. Your team has been eliminated.");
+                            document.getElementById('output').innerHTML = '<h2>Your team has been eliminated.</h2>';
+                            document.getElementById('output').style.display = 'flex';
                             document.getElementById('preview').style.display = 'none';
-                            document.getElementById('output').style.display = 'none';
-                            document.getElementById('thankyou').style.display = 'flex';
                           }
                         } else {
                           database.child(resulttosave).set({
@@ -531,18 +529,18 @@
                         }
                       });
                     } else {
-                      if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
-                        window.location.reload();
-                      }
+                      document.getElementById('output').innerHTML = '<h2>This isn\'t your QR. Put it back.<br>If you think this is a mistake, recheck passkey or contact staff.</h2>';
+                      document.getElementById('output').style.display = 'flex';
+                      document.getElementById('preview').style.display = 'none';
                     }
                   } else if (round1teams.includes(userInput.toLowerCase()) == false && password.includes(userInput.toLowerCase()) == true) {
-                    if (!window.alert("Incorrect passkey. \nYour team has been eliminated.")) {
-                      window.location.reload();
-                    }
+                    document.getElementById('output').innerHTML = '<h2>Your team has been eliminated.</h2>';
+                    document.getElementById('output').style.display = 'flex';
+                    document.getElementById('preview').style.display = 'none';
                   } else {
-                    if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
-                      window.location.reload();
-                    }
+                    document.getElementById('output').innerHTML = '<h2>Incorrect passkey.<br>Try again or contact the staff if any issue persists.</h2>';
+                    document.getElementById('output').style.display = 'flex';
+                    document.getElementById('preview').style.display = 'none';
                   }
                 } catch (error) {
                   console.error('Error retrieving data from Firebase: ', error);
@@ -571,18 +569,17 @@
                             document.getElementById('preview').style.display = 'none';
                             switch (index) {
                               case 0:
-                                document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
+                                document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals!</h2>';
                                 break;
                               case 1:
-                                document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
+                                document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals!</h2>';
                                 break;
                             }
                             document.getElementById('output').style.display = 'flex';
                           } else {
-                            alert("You are late. \nReport to staff. Your team has been eliminated.");
+                            document.getElementById('output').innerHTML = '<h2>Your team has been eliminated.</h2>';
+                            document.getElementById('output').style.display = 'flex';
                             document.getElementById('preview').style.display = 'none';
-                            document.getElementById('output').style.display = 'none';
-                            document.getElementById('thankyou').style.display = 'flex';
                           }
                         } else {
                           database.child(resulttosave).set({
@@ -592,10 +589,10 @@
                           document.getElementById('preview').style.display = 'none';
                           switch (index) {
                             case 0:
-                              document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
+                              document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals!</h2>';
                               break;
                             case 1:
-                              document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals</h2>';
+                              document.getElementById('output').innerHTML = '<h2>Congratulations!<br>You are in the finals!</h2>';
                               break;
                           }
                           document.getElementById('output').style.display = 'flex';
@@ -606,7 +603,7 @@
                       document.getElementById('output').style.display = 'flex';
                       document.getElementById('preview').style.display = 'none';
                     }
-                  } else if (round1teams.includes(userInput.toLowerCase()) == false && password.includes(userInput.toLowerCase()) == true) {
+                  } else if (round2teams.includes(userInput.toLowerCase()) == false && password.includes(userInput.toLowerCase()) == true) {
                     document.getElementById('output').innerHTML = '<h2>Your team has been eliminated.</h2>';
                     document.getElementById('output').style.display = 'flex';
                     document.getElementById('preview').style.display = 'none';
@@ -673,7 +670,7 @@
                       document.getElementById('output').style.display = 'flex';
                       document.getElementById('preview').style.display = 'none';
                     }
-                  } else if (round1teams.includes(userInput.toLowerCase()) == false && password.includes(userInput.toLowerCase()) == true) {
+                  } else if (round3teams.includes(userInput.toLowerCase()) == false && password.includes(userInput.toLowerCase()) == true) {
                     document.getElementById('output').innerHTML = '<h2>Your team has been eliminated.</h2>';
                     document.getElementById('output').style.display = 'flex';
                     document.getElementById('preview').style.display = 'none';
