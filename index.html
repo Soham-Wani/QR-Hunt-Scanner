@@ -13,6 +13,9 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@zxing/library@0.16.0/umd/index.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     @import url("https://fonts.googleapis.com/css?family=Montserrat");
 
@@ -120,17 +123,18 @@
     }
 
     a {
-      background: transparent;
-      border: 5px solid transparent;
-      border-radius: 20px;
-      z-index: 1;
-      height: 80vh;
-      width: 80vw;
-      padding-top: 5px;
+      background: #225ba1;
+      border: none;
+      border-radius: 50%;
+      z-index: 5;
+      padding: 15px;
       color: white;
       font-weight: 900;
       font-size: 20px;
       text-decoration: none;
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
     }
   </style>
 </head>
@@ -228,7 +232,7 @@
       const round3teams = []; // 2
       const round4 = [snapshot.val().q1, snapshot.val().q2, snapshot.val().q3, snapshot.val().q4, snapshot.val().q5, snapshot.val().q6, snapshot.val().q7, snapshot.val().q8, snapshot.val().q9, snapshot.val().q10, snapshot.val().q11, snapshot.val().q12, snapshot.val().q13, snapshot.val().q14, snapshot.val().q15, snapshot.val().q16, snapshot.val().q17, snapshot.val().q18, snapshot.val().q19, snapshot.val().q20, snapshot.val().q21, snapshot.val().q22, snapshot.val().q23, snapshot.val().q24, snapshot.val().q25, snapshot.val().q26, snapshot.val().q27, snapshot.val().q28, snapshot.val().q29, snapshot.val().q30, snapshot.val().q31, snapshot.val().q32, snapshot.val().q33, snapshot.val().q34, snapshot.val().q35, snapshot.val().q36, snapshot.val().q37, snapshot.val().q38, snapshot.val().q39, snapshot.val().q40, snapshot.val().q41, snapshot.val().q42, snapshot.val().q43, snapshot.val().q44, snapshot.val().q45, snapshot.val().q46, snapshot.val().q47, snapshot.val().q48, snapshot.val().q49, snapshot.val().q50, snapshot.val().q51];
       const huntstarttime = '2023-03-22T00:00:00+05:30';
-      const round0endtime = '2023-03-22T00:00:00+05:30';
+      const round0endtime = '2023-03-22T12:00:00+05:30';
       const round1endtime = '2023-03-22T01:00:00+05:30';
       const round2endtime = '2023-03-22T01:00:00+05:30';
       const round3endtime = '2023-03-22T02:00:00+05:30';
@@ -298,7 +302,7 @@
                           clue = snapshot.val().clue6;
                           break;
                       }
-                      document.getElementById('output').innerHTML = '<div id=\'iframecontainer\'><iframe id="iframe" src=\'' + clue + '\'></iframe></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
+                      document.getElementById('output').innerHTML = '<div id=\'iframecontainer\'><iframe id="iframe" src=\'' + clue + '\'></iframe></div><a id=\'link\' href=\'' + clue + '\'><i class="fa fa-external-link" aria-hidden="true"></i></a>';
                       document.getElementById('output').style.display = 'flex';
                     });
                   });
@@ -354,7 +358,7 @@
                               clue = snapshot.val().clue4;
                               break;
                           }
-                          document.getElementById('output').innerHTML = '<div id=\'imagecontainer\'><img id="image" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
+                          document.getElementById('output').innerHTML = '<div id=\'imagecontainer\'><img id="image" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'><i class="fa fa-external-link" aria-hidden="true"></i></a>';
                           document.getElementById('output').style.display = 'flex';
                         });
                       } else {
@@ -397,7 +401,7 @@
                             clue = snapshot.val().clue4;
                             break;
                         }
-                        document.getElementById('output').innerHTML = '<div id=\'imagecontainer\'><img id="image" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
+                        document.getElementById('output').innerHTML = '<div id=\'imagecontainer\'><img id="image" src=\'' + clue + '\' /></div><a id=\'link\' href=\'' + clue + '\'><i class="fa fa-external-link" aria-hidden="true"></i></a>';
                         document.getElementById('output').style.display = 'flex';
                       });
                     }
@@ -449,7 +453,7 @@
                                   clue = snapshot.val().clue2;
                                   break;
                               }
-                              document.getElementById('output').innerHTML = '<div id=\'iframecontainer\'><iframe id="iframe" src=\'' + clue + '\'></iframe></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
+                              document.getElementById('output').innerHTML = '<div id=\'iframecontainer\'><iframe id="iframe" src=\'' + clue + '\'></iframe></div><a id=\'link\' href=\'' + clue + '\'><i class="fa fa-external-link" aria-hidden="true"></i></a>';
                               document.getElementById('output').style.display = 'flex';
                             });
                           } else {
@@ -479,7 +483,7 @@
                                 clue = snapshot.val().clue2;
                                 break;
                             }
-                            document.getElementById('output').innerHTML = '<div id=\'iframecontainer\'><iframe id="iframe" src=\'' + clue + '\'></iframe></div><a id=\'link\' href=\'' + clue + '\'>Open in new tab</a>';
+                            document.getElementById('output').innerHTML = '<div id=\'iframecontainer\'><iframe id="iframe" src=\'' + clue + '\'></iframe></div><a id=\'link\' href=\'' + clue + '\'><i class="fa fa-external-link" aria-hidden="true"></i></a>';
                             document.getElementById('output').style.display = 'flex';
                           });
                         }
