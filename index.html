@@ -6,6 +6,7 @@
   3. Rescan button
   4. CSS errrors
   5. Body text
+  6. Cancel passkey event reload
 -->
 
 <head>
@@ -24,7 +25,7 @@
     }
 
     body {
-      background: #000000;
+      background: #86a6d4;
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center center;
@@ -130,11 +131,12 @@
       padding: 15px;
       color: white;
       font-weight: 900;
-      font-size: 20px;
+      font-size: 25px;
       text-decoration: none;
       position: fixed;
       right: 20px;
       bottom: 20px;
+      cursor: pointer;
     }
 
     a {
@@ -145,17 +147,23 @@
       padding: 15px;
       color: white;
       font-weight: 900;
-      font-size: 20px;
+      font-size: 25px;
       text-decoration: none;
       position: fixed;
-      right: 90px;
+      right: 95px;
       bottom: 20px;
+    }
+
+    #heading {
+      color: white;
+      text-align: center;
+      padding: 20px;
     }
   </style>
 </head>
 
 <body>
-  <h1 style='color:white;text-align:center;padding:20px'>QR Quest: The Crusade</h1>
+  <h1 id="heading">QR Quest: The Crusade</h1>
   <div id="previewcontainer">
     <video id="preview"></video>
   </div>
@@ -252,7 +260,7 @@
       const round1endtime = '2023-03-22T01:00:00+05:30';
       const round2endtime = '2023-03-22T01:00:00+05:30';
       const round3endtime = '2023-03-22T02:00:00+05:30';
-      const round4endtime = '2023-03-22T09:00:30+05:30';
+      const round4endtime = '2023-03-22T10:00:30+05:30';
       let clue;
       if (document.body.getBoundingClientRect().height > document.body.getBoundingClientRect().width) {
         document.getElementById('preview').style.maxHeight = '80vh';
