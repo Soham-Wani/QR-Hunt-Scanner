@@ -2,9 +2,6 @@
 <!-- https://console.firebase.google.com/project/qr-hunt-1/database/qr-hunt-1-default-rtdb/data/~2F -->
 <!-- Errors:
   1. Secure Firebase
-  2. What happens if incorrect time period (time error handling)
-  3. Rescan button
-  4. CSS errrors
   5. Body text
   6. Cancel passkey event reload
 -->
@@ -310,6 +307,9 @@
             if (round0.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round0endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) > new Date(huntstarttime)) {
               var database = firebase.database().ref('round0db');
               const userInput = prompt("Please enter your group passkey: ");
+              if (result === null) {
+                window.location.reload();
+              }
               const resulttosave = result.text;
               const index = round0.indexOf(resulttosave);
               const allowedindex1 = index * 2;
@@ -361,6 +361,9 @@
             } else if (round1.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round1endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round0endtime)) {
               var database = firebase.database().ref('round1db');
               const userInput = prompt("Please enter your group passkey: ");
+              if (result === null) {
+                window.location.reload();
+              }
               const resulttosave = result.text;
               const index = round1.indexOf(resulttosave);
               const allowedindex1 = index * 2;
@@ -468,6 +471,9 @@
                   round1teams.splice(0, 0, ...round1teamssplice);
                   console.log(round1teams);
                   const userInput = prompt("Please enter your group passkey: ");
+                  if (result === null) {
+                    window.location.reload();
+                  }
                   const resulttosave = result.text;
                   const index = round2.indexOf(resulttosave);
                   const allowedindex1 = index * 2;
@@ -556,6 +562,9 @@
                   });
                   console.log(round2teams);
                   const userInput = prompt("Please enter your group passkey: ");
+                  if (result === null) {
+                    window.location.reload();
+                  }
                   const resulttosave = result.text;
                   const index = round3.indexOf(resulttosave);
                   const allowedindex1 = index * 2;
@@ -627,6 +636,9 @@
                   });
                   console.log(round3teams);
                   const userInput = prompt("Please enter your group passkey: ");
+                  if (result === null) {
+                    window.location.reload();
+                  }
                   const resulttosave = result.text;
                   const index = round4.indexOf(resulttosave);
                   if (round3teams.includes(userInput.toLowerCase())) {
@@ -683,11 +695,11 @@
                   console.error('Error retrieving data from Firebase: ', error);
                 }
               });
-            } else if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round4endtime)) {
+            } else if ((round0.includes(result.text) == true || round1.includes(result.text) == true || round2.includes(result.text) == true || round3.includes(result.text) == true || round4.includes(result.text) == true) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round4endtime)) {
               document.getElementById('output').innerHTML = '<h2>This QR hunt has been ended.</h2>';
               document.getElementById('output').style.display = 'flex';
               document.getElementById('preview').style.display = 'none';
-            } else if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) < new Date(huntstarttime)) {
+            } else if ((round0.includes(result.text) == true || round1.includes(result.text) == true || round2.includes(result.text) == true || round3.includes(result.text) == true || round4.includes(result.text) == true) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) < new Date(huntstarttime)) {
               document.getElementById('output').innerHTML = '<h2>This QR hunt has not been started yet.</h2>';
               document.getElementById('output').style.display = 'flex';
               document.getElementById('preview').style.display = 'none';
@@ -704,9 +716,9 @@
           .catch(err => {
             console.error(err);
             if (err.message == "Permission denied" || err.message == "Permission dismissed") {
-              if (!window.alert('Missing the permission to use camera. Can\'t proceed further.')) {
-                window.location.reload();
-              }
+              document.getElementById('output').innerHTML = '<h2>Missing the permission to use camera. Can\'t proceed further.</h2>';
+              document.getElementById('output').style.display = 'flex';
+              document.getElementById('preview').style.display = 'none';
             } else {
               window.alert('This is an unanticipated error. Please report to staff. \n' + err.message + '.');
             }
