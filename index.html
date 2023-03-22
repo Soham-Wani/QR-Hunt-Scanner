@@ -271,11 +271,11 @@
       const round3teams = []; // 2
       const round4 = [snapshot.val().q1, snapshot.val().q2, snapshot.val().q3, snapshot.val().q4, snapshot.val().q5, snapshot.val().q6, snapshot.val().q7, snapshot.val().q8, snapshot.val().q9, snapshot.val().q10, snapshot.val().q11, snapshot.val().q12, snapshot.val().q13, snapshot.val().q14, snapshot.val().q15, snapshot.val().q16, snapshot.val().q17, snapshot.val().q18, snapshot.val().q19, snapshot.val().q20, snapshot.val().q21, snapshot.val().q22, snapshot.val().q23, snapshot.val().q24, snapshot.val().q25, snapshot.val().q26, snapshot.val().q27, snapshot.val().q28, snapshot.val().q29, snapshot.val().q30, snapshot.val().q31, snapshot.val().q32, snapshot.val().q33, snapshot.val().q34, snapshot.val().q35, snapshot.val().q36, snapshot.val().q37, snapshot.val().q38, snapshot.val().q39, snapshot.val().q40, snapshot.val().q41, snapshot.val().q42, snapshot.val().q43, snapshot.val().q44, snapshot.val().q45, snapshot.val().q46, snapshot.val().q47, snapshot.val().q48, snapshot.val().q49, snapshot.val().q50, snapshot.val().q51];
       const huntstarttime = '2023-03-22T00:00:00+05:30';
-      const round0endtime = '2023-03-22T00:00:00+05:30';
+      const round0endtime = '2023-03-22T22:00:00+05:30';
       const round1endtime = '2023-03-22T00:00:00+05:30';
       const round2endtime = '2023-03-22T00:00:00+05:30';
       const round3endtime = '2023-03-22T00:00:00+05:30';
-      const round4endtime = '2023-03-22T00:00:30+05:30';
+      const round4endtime = '2023-03-22T22:00:30+05:30';
       let clue;
       if (document.body.getBoundingClientRect().height > document.body.getBoundingClientRect().width) {
         document.getElementById('preview').style.maxHeight = '80vh';
@@ -307,9 +307,10 @@
             if (round0.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round0endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) > new Date(huntstarttime)) {
               var database = firebase.database().ref('round0db');
               const userInput = prompt("Please enter your group passkey: ");
-              if (result === null) {
+              if (userInput === null) {
                 window.location.reload();
               }
+              console.log(userInput);
               const resulttosave = result.text;
               const index = round0.indexOf(resulttosave);
               const allowedindex1 = index * 2;
@@ -361,7 +362,7 @@
             } else if (round1.includes(result.text) == true && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round1endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round0endtime)) {
               var database = firebase.database().ref('round1db');
               const userInput = prompt("Please enter your group passkey: ");
-              if (result === null) {
+              if (userInput === null) {
                 window.location.reload();
               }
               const resulttosave = result.text;
@@ -471,7 +472,7 @@
                   round1teams.splice(0, 0, ...round1teamssplice);
                   console.log(round1teams);
                   const userInput = prompt("Please enter your group passkey: ");
-                  if (result === null) {
+                  if (userInput === null) {
                     window.location.reload();
                   }
                   const resulttosave = result.text;
@@ -562,7 +563,7 @@
                   });
                   console.log(round2teams);
                   const userInput = prompt("Please enter your group passkey: ");
-                  if (result === null) {
+                  if (userInput === null) {
                     window.location.reload();
                   }
                   const resulttosave = result.text;
@@ -585,6 +586,8 @@
                                 break;
                             }
                             document.getElementById('output').style.display = 'flex';
+                            document.getElementById('output').style.backgroundColor = "#10a96e";
+
                           } else {
                             document.getElementById('output').innerHTML = '<h2>Your team has been eliminated.</h2>';
                             document.getElementById('output').style.display = 'flex';
@@ -605,6 +608,7 @@
                               break;
                           }
                           document.getElementById('output').style.display = 'flex';
+                          document.getElementById('output').style.backgroundColor = "#10a96e";
                         }
                       });
                     } else {
@@ -636,7 +640,7 @@
                   });
                   console.log(round3teams);
                   const userInput = prompt("Please enter your group passkey: ");
-                  if (result === null) {
+                  if (userInput === null) {
                     window.location.reload();
                   }
                   const resulttosave = result.text;
@@ -674,6 +678,7 @@
                             document.getElementById('preview').style.display = 'none';
                             document.getElementById('output').innerHTML = '<h2>Your team just scanned and recieved ' + scannedpoints + ' points.</h2>';
                             document.getElementById('output').style.display = 'flex';
+                            document.getElementById('output').style.backgroundColor = "#10a96e";
                           });
                         }
                       });
