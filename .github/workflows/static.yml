@@ -1,0 +1,19 @@
+name: Build and deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build site
+      run: |
+        # Replace the environment variables in the HTML file
+        sed -i "s|{{apiKey}}|$apiKey|g" index.html
