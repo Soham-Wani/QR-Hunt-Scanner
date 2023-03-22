@@ -230,9 +230,9 @@
       const huntstarttime = '2023-03-22T00:00:00+05:30';
       const round0endtime = '2023-03-22T00:00:00+05:30';
       const round1endtime = '2023-03-22T01:00:00+05:30';
-      const round2endtime = '2023-03-22T00:00:00+05:30';
-      const round3endtime = '2023-03-22T00:00:00+05:30';
-      const round4endtime = '2023-03-22T00:00:30+05:30';
+      const round2endtime = '2023-03-22T01:00:00+05:30';
+      const round3endtime = '2023-03-22T02:00:00+05:30';
+      const round4endtime = '2023-03-22T09:00:30+05:30';
       let clue;
       if (document.body.getBoundingClientRect().height > document.body.getBoundingClientRect().width) {
         document.getElementById('preview').style.maxHeight = '80vh';
@@ -642,6 +642,14 @@
               });
             } else if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round4endtime)) {
               if (!window.alert("This QR hunt has been ended.")) {
+                window.location.reload();
+              }
+            } else if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) < new Date(huntstarttime)) {
+              if (!window.alert("This QR hunt has not been started yet.")) {
+                window.location.reload();
+              }
+            } else if ((round0.includes(result.text) == true && (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round0endtime) || new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))) < new Date(huntstarttime)) || (round1.includes(result.text) == true && (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round1endtime) || new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))) < new Date(round0endtime)) || (round2.includes(result.text) == true && (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round2endtime) || new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))) < new Date(round1endtime)) || (round3.includes(result.text) == true && (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round3endtime) || new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))) < new Date(round2endtime)) || (round4.includes(result.text) == true && (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round4endtime) || new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))) < new Date(round3endtime))) {
+              if (!window.alert("This round is over or hasn\'t been started yet.")) {
                 window.location.reload();
               }
             } else {
