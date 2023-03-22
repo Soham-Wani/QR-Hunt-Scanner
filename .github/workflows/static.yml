@@ -19,8 +19,3 @@ jobs:
         sed -i "s|{{APIKEY}}|$APIKEY|g" index.html
         sed -i "s|{{MSGID}}|$MSGID|g" index.html
         sed -i "s|{{APPID}}|$APPID|g" index.html
-
-    env:
-      APIKEY: ${{ secrets.APIKEY }}
-      MSGID: ${{ secrets.MSGID }}
-      APPID: ${{ secrets.APPID }}
