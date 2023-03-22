@@ -602,18 +602,18 @@
                         }
                       });
                     } else {
-                      if (!window.alert("This isn\'t your QR. Put it back. \nIf you think this is a mistake, recheck passkey or contact staff.")) {
-                        window.location.reload();
-                      }
+                      document.getElementById('output').innerHTML = '<h2>This isn\'t your QR. Put it back.<br>If you think this is a mistake, recheck passkey or contact staff.</h2>';
+                      document.getElementById('output').style.display = 'flex';
+                      document.getElementById('preview').style.display = 'none';
                     }
                   } else if (round1teams.includes(userInput.toLowerCase()) == false && password.includes(userInput.toLowerCase()) == true) {
-                    if (!window.alert("Incorrect passkey. \nYour team has been eliminated.")) {
-                      window.location.reload();
-                    }
+                    document.getElementById('output').innerHTML = '<h2>Your team has been eliminated.</h2>';
+                    document.getElementById('output').style.display = 'flex';
+                    document.getElementById('preview').style.display = 'none';
                   } else {
-                    if (!window.alert("Incorrect passkey. \nTry again or contact the staff if any issue persists.")) {
-                      window.location.reload();
-                    }
+                    document.getElementById('output').innerHTML = '<h2>Incorrect passkey.<br>Try again or contact the staff if any issue persists.</h2>';
+                    document.getElementById('output').style.display = 'flex';
+                    document.getElementById('preview').style.display = 'none';
                   }
                 } catch (error) {
                   console.error('Error retrieving data from Firebase: ', error);
@@ -636,9 +636,9 @@
                     if (userInput.toLowerCase() == round3teams[0] || userInput.toLowerCase() == round3teams[1]) {
                       database.child(resulttosave).once('value').then(function (snapshot) {
                         if (snapshot.exists()) {
-                          if (!window.alert("This QR is already scanned.")) {
-                            window.location.reload();
-                          }
+                          document.getElementById('output').innerHTML = '<h2>This QR is already scanned.</h2>';
+                          document.getElementById('output').style.display = 'flex';
+                          document.getElementById('preview').style.display = 'none';
                         } else {
                           database.child(userInput.toLowerCase()).once('value').then(function (snapshot) {
                             if (snapshot.val() !== null) {
@@ -663,7 +663,7 @@
                               });
                             }
                             document.getElementById('preview').style.display = 'none';
-                            document.getElementById('output').innerHTML = 'Your team just scanned and recieved ' + scannedpoints + ' points.';
+                            document.getElementById('output').innerHTML = '<h2>Your team just scanned and recieved ' + scannedpoints + ' points.</h2>';
                             document.getElementById('output').style.display = 'flex';
                           });
                         }
