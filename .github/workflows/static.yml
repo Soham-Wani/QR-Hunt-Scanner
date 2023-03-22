@@ -16,4 +16,11 @@ jobs:
     - name: Build site
       run: |
         # Replace the environment variables in the HTML file
-        sed -i "s|{{apiKey}}|$apiKey|g" index.html
+        sed -i "s|{{APIKEY}}|$APIKEY|g" index.html
+        sed -i "s|{{MSGID}}|$MSGID|g" index.html
+        sed -i "s|{{APPID}}|$APPID|g" index.html
+
+    env:
+      APIKEY: ${{ secrets.APIKEY }}
+      MSGID: ${{ secrets.MSGID }}
+      APPID: ${{ secrets.APPID }}
