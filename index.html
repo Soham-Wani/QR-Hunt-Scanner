@@ -117,7 +117,7 @@
       display: none;
       align-items: center;
       justify-content: center;
-      font-size: 36px;
+      font-size: 30px;
       color: white;
       background-color: rgba(255, 0, 0, 0.1);
       z-index: 2;
@@ -154,16 +154,31 @@
       bottom: 20px;
     }
 
+    #headingcontainer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 0;
+    }
+
     #heading {
       color: white;
       text-align: center;
+      font-weight: 900;
+      background: #225ba1;
+      border-radius: 0 0 20px 20px;
+      font-size: 25px;
       padding: 20px;
+      z-index: 5;
+      top: 0px;
     }
   </style>
 </head>
 
 <body>
-  <h1 id="heading">QR Quest: The Crusade</h1>
+  <div id="headingcontainer">
+    <h1 id="heading">QR Quest: The Crusade</h1>
+  </div>
   <div id="previewcontainer">
     <video id="preview"></video>
   </div>
