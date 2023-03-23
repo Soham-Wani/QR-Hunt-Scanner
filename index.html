@@ -1,16 +1,18 @@
 <html>
+<!-- https://console.firebase.google.com/project/qr-hunt-1/database/qr-hunt-1-default-rtdb/data/~2F -->
+<!-- Errors:
+  1. Secure Firebase
+-->
 
 <head>
   <title>QR Hunt Scanner</title>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@zxing/library@0.16.0/umd/index.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" type="text/css" href="style.css"
+   <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
 <body>
@@ -21,12 +23,40 @@
     <video id="preview"></video>
   </div>
   <div id="output"></div>
-  <div id="thankyou">Thank you for playing</div>
+  <div id="thankyou">Thank you for playing!</div>
+  <div id="overlay"></div>
+  <div id="infocontainer">
+    <button id="cancelbutton"><i class="fa fa-times" aria-hidden="true"></i></button>
+    <h2>QR Quest: The Crusade</h2>
+    <p>The most anticipated event of the annual Tech Fest of GSV - <b>QR Hunt: The Crusade</b>, an innovative take on
+      the classic treasure hunt that is sure to take your breath away.<br><br><i>Scan QR codes, get the clues, find next
+        hint
+        before your opponent in the given time or get eliminated! Only the fit will survive.</i>
+      <br><br>Check out the rulebook cum brochure here.
+    </p>
+    <iframe width="100%" height="200px" src="https://hello/" style="border-radius:6px;border:none"></iframe>
+    <div style="font-family:monospace;text-align:center;padding-top: 20px;">Website made with <i
+        class="fa-solid fa-heart"></i> by <a href='https://github.com/Soham-Wani' style='color:white;font-family:monospace'>Soham
+        Wani</a></div>
+  </div>
+  <button id="infobutton"><i class="fa fa-info-circle" aria-hidden="true"></i></button>
   <button id="rescanbutton" onclick="location.reload()" title="Reload"><i class="fa fa-refresh"
       aria-hidden="true"></i></button>
   <script>
+    document.getElementById("infobutton").addEventListener('click', () => {
+      document.getElementById("infocontainer").classList.toggle("show");
+      document.getElementById("overlay").classList.toggle("show");
+    });
+    document.getElementById("overlay").addEventListener('click', () => {
+      document.getElementById("infocontainer").classList.remove("show");
+      document.getElementById("overlay").classList.remove("show");
+    });
+    document.getElementById("cancelbutton").addEventListener('click', () => {
+      document.getElementById("infocontainer").classList.remove("show");
+      document.getElementById("overlay").classList.remove("show");
+    });
     const firebaseConfig = {
-      apiKey: "{{APIKEY}}",
+      apiKey: "AIzaSyCkMlXP9A7WRkLvxMW4NO5pgOPPrHNTDnA",
       authDomain: "qr-hunt-scanner.firebaseapp.com",
       databaseURL: "https://qr-hunt-scanner-default-rtdb.asia-southeast1.firebasedatabase.app",
       projectId: "qr-hunt-scanner",
@@ -100,9 +130,9 @@
     }
     firebase.database().ref('QRs').child('qrs').once('value').then(function (snapshot) {
       const round0 = [snapshot.val().r0q1, snapshot.val().r0q2, snapshot.val().r0q3, snapshot.val().r0q4, snapshot.val().r0q5, snapshot.val().r0q6];
-      const password = ['pass1', 'pass2', 'pass3', 'pass4', 'pass5', 'pass6', 'pass7', 'pass8', 'pass9', 'pass10', 'pass11', 'pass12'];
+      const password = ['pass1', 'pass2', 'pass3', 'pass4', 'pass5', 'pass6', 'pass7', 'pass8', 'pass9', 'pass10', 'pass11', 'pass12', 'pass13', 'pass14', 'pass15', 'pass16', 'pass17', 'pass18'];
       const round1 = [snapshot.val().r1q1, snapshot.val().r1q2, snapshot.val().r1q3, snapshot.val().r1q4, snapshot.val().r1q5, snapshot.val().r1q6, snapshot.val().r1q7, snapshot.val().r1q8]; // 3 
-      const round1teams = ['pass13', 'pass14'];
+      const round1teams = ['pass19', 'pass20'];
       const round1teamssplice = []; // 6 + 2
       const round2 = [snapshot.val().r2q1, snapshot.val().r2q2, snapshot.val().r2q3, snapshot.val().r2q4];
       const round2teams = []; // 4
@@ -110,12 +140,23 @@
       const round3teams = []; // 2
       const round4 = [snapshot.val().q1, snapshot.val().q2, snapshot.val().q3, snapshot.val().q4, snapshot.val().q5, snapshot.val().q6, snapshot.val().q7, snapshot.val().q8, snapshot.val().q9, snapshot.val().q10, snapshot.val().q11, snapshot.val().q12, snapshot.val().q13, snapshot.val().q14, snapshot.val().q15, snapshot.val().q16, snapshot.val().q17, snapshot.val().q18, snapshot.val().q19, snapshot.val().q20, snapshot.val().q21, snapshot.val().q22, snapshot.val().q23, snapshot.val().q24, snapshot.val().q25, snapshot.val().q26, snapshot.val().q27, snapshot.val().q28, snapshot.val().q29, snapshot.val().q30, snapshot.val().q31, snapshot.val().q32, snapshot.val().q33, snapshot.val().q34, snapshot.val().q35, snapshot.val().q36, snapshot.val().q37, snapshot.val().q38, snapshot.val().q39, snapshot.val().q40, snapshot.val().q41, snapshot.val().q42, snapshot.val().q43, snapshot.val().q44, snapshot.val().q45, snapshot.val().q46, snapshot.val().q47, snapshot.val().q48, snapshot.val().q49, snapshot.val().q50, snapshot.val().q51];
       const huntstarttime = '2023-03-22T00:00:00+05:30';
-      const round0endtime = '2023-03-22T22:00:00+05:30';
+      const round0endtime = '2023-03-23T22:00:00+05:30';
       const round1endtime = '2023-03-22T00:00:00+05:30';
       const round2endtime = '2023-03-22T00:00:00+05:30';
       const round3endtime = '2023-03-22T00:00:00+05:30';
       const round4endtime = '2023-03-23T22:00:30+05:30';
       let clue;
+      if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round0endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) > new Date(huntstarttime)) {
+        document.getElementById('heading').innerHTML = 'Round 1';
+      } else if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round1endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round0endtime)) {
+        document.getElementById('heading').innerHTML = 'Round 2';
+      } else if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round2endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round1endtime)) {
+        document.getElementById('heading').innerHTML = 'Round 3';
+      } else if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round3endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round2endtime)) {
+        document.getElementById('heading').innerHTML = 'Round 4';
+      } else if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round4endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round3endtime)) {
+        document.getElementById('heading').innerHTML = 'Final Round';
+      }
       if (document.body.getBoundingClientRect().height > document.body.getBoundingClientRect().width) {
         document.getElementById('preview').style.maxHeight = '80vh';
         document.getElementById('preview').style.width = '80vw';
@@ -149,11 +190,11 @@
               if (userInput === null) {
                 window.location.reload();
               }
-              console.log(userInput);
               const resulttosave = result.text;
               const index = round0.indexOf(resulttosave);
-              const allowedindex1 = index * 2;
-              const allowedindex2 = (index * 2) + 1;
+              const allowedindex1 = index * 3;
+              const allowedindex2 = (index * 3) + 1;
+              const allowedindex3 = (index * 3) + 2;
               if (password.includes(userInput.toLowerCase())) {
                 if (userInput.toLowerCase() == password[allowedindex1] || userInput.toLowerCase() == password[allowedindex2]) {
                   database.child(resulttosave).once('value').then(function (snapshot) {
@@ -309,7 +350,6 @@
                     round1teamssplice.push(round1pass);
                   });
                   round1teams.splice(0, 0, ...round1teamssplice);
-                  console.log(round1teams);
                   const userInput = prompt("Please enter your group passkey: ");
                   if (userInput === null) {
                     window.location.reload();
@@ -400,7 +440,6 @@
                     const round2pass = childSnapshot.child("passkey").val();
                     round2teams.push(round2pass);
                   });
-                  console.log(round2teams);
                   const userInput = prompt("Please enter your group passkey: ");
                   if (userInput === null) {
                     window.location.reload();
@@ -477,7 +516,6 @@
                     const round2pass = childSnapshot.child("passkey").val();
                     round3teams.push(round2pass);
                   });
-                  console.log(round3teams);
                   const userInput = prompt("Please enter your group passkey: ");
                   if (userInput === null) {
                     window.location.reload();
@@ -539,6 +577,10 @@
                   console.error('Error retrieving data from Firebase: ', error);
                 }
               });
+            } else if (round0.includes(result.text) == false && round1.includes(result.text) == false && round2.includes(result.text) == false && round3.includes(result.text) == false && round4.includes(result.text) == false) {
+              document.getElementById('output').innerHTML = '<h2>Detected QR is not a part of this QR hunt.</h2>';
+              document.getElementById('output').style.display = 'flex';
+              document.getElementById('preview').style.display = 'none';
             } else if ((round0.includes(result.text) == true || round1.includes(result.text) == true || round2.includes(result.text) == true || round3.includes(result.text) == true || round4.includes(result.text) == true) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round4endtime)) {
               document.getElementById('output').innerHTML = '<h2>This QR hunt has been ended.</h2>';
               document.getElementById('output').style.display = 'flex';
@@ -549,10 +591,6 @@
               document.getElementById('preview').style.display = 'none';
             } else if ((round0.includes(result.text) == true && (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round0endtime) || new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))) < new Date(huntstarttime)) || (round1.includes(result.text) == true && (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round1endtime) || new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))) < new Date(round0endtime)) || (round2.includes(result.text) == true && (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round2endtime) || new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))) < new Date(round1endtime)) || (round3.includes(result.text) == true && (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round3endtime) || new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))) < new Date(round2endtime)) || (round4.includes(result.text) == true && (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round4endtime) || new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))) < new Date(round3endtime))) {
               document.getElementById('output').innerHTML = '<h2>This round is over or hasn\'t been started yet.</h2>';
-              document.getElementById('output').style.display = 'flex';
-              document.getElementById('preview').style.display = 'none';
-            } else {
-              document.getElementById('output').innerHTML = '<h2>Detected QR is not a part of this QR hunt.</h2>';
               document.getElementById('output').style.display = 'flex';
               document.getElementById('preview').style.display = 'none';
             }
