@@ -10,5 +10,6 @@ The game will proceed in 5 rounds. Teams will eliminate one by one until two tea
 - Indiscipline and violence will be strictly not tolerated. Not only you will be disqualified, there are chances of disciplinary action will be taken against the participants.
 - Participants (in the game and outside the game) should not help anyone besides their own team. This will result in instant disqualification.
 - Each team will have a volunteer from the organising committee to enforce these rules. Team actions maybe recorded. Misbehaviour with any member of the organising committee will lead to disqualification even if the team has won already.
+
 Here is the game plan. Players are expected to understand it and then come.
 - **Round 1:** In this round, 18 teams will exist. Each team will be handed out a QR code which bears a clue to the next QR. Players should scan the QR with the scanner given (this repository) and reach to the next clue. They should enter their 
