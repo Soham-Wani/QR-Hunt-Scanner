@@ -448,10 +448,11 @@
                             }
                             const resulttosave = result.text;
                             const index = round1.indexOf(resulttosave);
-                            const allowedindex1 = index * 2;
-                            const allowedindex2 = (index * 2) + 1;
+                            const allowedindex1 = index * 3;
+                            const allowedindex2 = (index * 3) + 1;
+                            const allowedindex3 = (index * 3) + 2;
                             if (password.includes(userInput.toLowerCase())) {
-                                if (userInput.toLowerCase() == password[allowedindex1] || userInput.toLowerCase() == password[allowedindex2]) {
+                                if (userInput.toLowerCase() == password[allowedindex1] || userInput.toLowerCase() == password[allowedindex2] || userInput.toLowerCase() == password[allowedindex3]) {
                                     database.child(resulttosave).once('value').then(function (snapshot) {
                                         if (snapshot.exists()) {
                                             var savedpasskey = snapshot.val().passkey;
