@@ -6,7 +6,7 @@ QR Quest is one of the most anticipated events of Gati Shakti Vishwavidyalaya's 
 ## For players:
 The game will proceed in 5 rounds. Teams will eliminate one by one until two teams remain in round 4 and round 5 will be the decider. Here are some general rules we expect the players to follow.
 - Each team will be provided with their unique passkey that they will use throughout the game. They will have to enter the passkey after each scan. Players are not allowed to share their key with anyone or use any other team's key.
-- No QR codes are be hidden outside the college campus, inside buildings, near electrical appliances, in restricted areas, in dense flora or any other dangerous areas. Thus, entering such areas is strictly prohibited.
+- No QR codes are hidden outside the college campus, inside buildings, near electrical appliances, in restricted areas, in dense flora or any other dangerous areas. Thus, entering such areas is strictly prohibited.
 - Indiscipline and violence will be strictly not tolerated. Not only you will be disqualified, there are chances of disciplinary action will be taken against the participants.
 - Participants (in the game and outside the game) should not help anyone besides their own team. This will result in instant disqualification.
 - Each team will have a volunteer from the organising committee to enforce these rules. Team actions maybe recorded. Misbehaviour with any member of the organising committee will lead to disqualification even if the team has won already.
