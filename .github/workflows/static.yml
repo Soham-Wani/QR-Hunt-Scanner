@@ -16,3 +16,6 @@ jobs:
     - name: Build site
       run: |
         sed -i "s|{{APIKEY}}|$APIKEY|g" index.html
+
+    - name: Pull Docker Image
+      run: docker pull --insecure ghcr.io/actions/jekyll-build-pages:v1.0.7
