@@ -9,7 +9,7 @@
 <body>
     <script>
         const firebaseConfig = {
-            apiKey: "{{apiKey}}",
+            apiKey: "{{APIKEY}}",
             authDomain: "qr-hunt-scanner.firebaseapp.com",
             databaseURL: "https://qr-hunt-scanner-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "qr-hunt-scanner",
