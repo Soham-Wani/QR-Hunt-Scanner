@@ -13,6 +13,7 @@ The game will proceed in 5 rounds. Teams will eliminate one by one until two tea
 - Players must stay together as a team at all times.
 - Each team will have a volunteer from the organising committee to enforce these rules. Team actions maybe recorded. Misbehaviour with any member of the organising committee will lead to disqualification even if the team has won already.
 - All the teams participating should return to the starting point with all the QRs collected in the game, even if they are eliminated.
+- There may be dummy QRs spread over the campus, beware of those. Complaints regarding those will not be entertained.
 - **In any circumstances, decision of the organising committee will be final and should not be questioned. By playing the game, participants agree to follow and abide all the above mentioned rules.**
 
 Here is the game plan. Players are expected to understand it and then come.
