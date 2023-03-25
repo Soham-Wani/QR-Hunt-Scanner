@@ -397,7 +397,7 @@
                                             passkey: userInput.toLowerCase(),
                                             time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
                                         });
-                                        if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round0endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) > new Date(huntstarttime)) {
+                                        if (/*new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round0endtime) && */new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) > new Date(huntstarttime)) {
                                             firebase.database().ref('Clues').child('round0').once('value').then(function (snapshot) {
                                                 document.getElementById('preview').style.display = 'none';
                                                 switch (index) {
@@ -457,7 +457,7 @@
                                         if (snapshot.exists()) {
                                             var savedpasskey = snapshot.val().passkey;
                                             if (savedpasskey === userInput.toLowerCase()) {
-                                                if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round1endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round0endtime)) {
+                                                if (/*new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round1endtime) && */new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round0endtime)) {
                                                     document.getElementById('preview').style.display = 'none';
                                                     firebase.database().ref('Clues').child('round1').once('value').then(function (snapshot) {
                                                         switch (index) {
@@ -504,7 +504,7 @@
                                                 passkey: userInput.toLowerCase(),
                                                 time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
                                             });
-                                            if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round1endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round0endtime)) {
+                                            if (/*new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round1endtime) && */new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round0endtime)) {
                                                 document.getElementById('preview').style.display = 'none';
                                                 firebase.database().ref('Clues').child('round1').once('value').then(function (snapshot) {
                                                     switch (index) {
@@ -577,7 +577,7 @@
                                                 if (snapshot.exists()) {
                                                     var savedpasskey = snapshot.val().passkey;
                                                     if (savedpasskey === userInput.toLowerCase()) {
-                                                        if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round2endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round1endtime)) {
+                                                        if (/*new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round2endtime) && */new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round1endtime)) {
                                                             document.getElementById('preview').style.display = 'none';
                                                             firebase.database().ref('Clues').child('round2').once('value').then(function (snapshot) {
                                                                 switch (index) {
@@ -612,7 +612,7 @@
                                                         passkey: userInput.toLowerCase(),
                                                         time: (new Date()).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
                                                     });
-                                                    if (new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round2endtime) && new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round1endtime)) {
+                                                    if (/*new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) <= new Date(round2endtime) && */new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })) >= new Date(round1endtime)) {
                                                         document.getElementById('preview').style.display = 'none';
                                                         firebase.database().ref('Clues').child('round2').once('value').then(function (snapshot) {
                                                             switch (index) {
