@@ -3,8 +3,9 @@
 This repository contains a custom QR scanner developed for conducting QR hunts. 
 ## Getting Started
 If you want to play one, find someone who is hosting one. If you want to host one, follow the steps below:
-1. To get started, fork this repository and clone to your local machine using: ```git clone https://github.com/Soham-Wani/QR-Hunt-Scanner.git ```
-
+1. To get started, fork this repository and clone to your local machine using:  
+```git clone https://github.com/Soham-Wani/QR-Hunt-Scanner.git ```  
+Alternatively, copy "`index.html`" on your editor.
 
 ## QR Quest: The Crusade
 QR Quest was a highly anticipated event at Gati Shakti Vishwavidyalaya's annual tech fest, Epitome'23, held on March 25, 2023, as an intracollege event. It was a unique twist on the traditional treasure hunt, challenging participants' problem-solving and analytical skills with QR codes that led them through a thrilling adventure of audio-visual clues. This event offered a fun and interactive opportunity to test tech-savvy skills and knowledge.
