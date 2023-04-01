@@ -1,6 +1,6 @@
 # QR Hunt Scanner
 ## Introduction
-This repository is a custom scanner developed by me to conduct QR hunts.
+This repository contains a custom QR scanner developed for conducting QR hunts. 
 ## QR Quest: The Crusade
 The first one was conducted at Gati Shakti Vishwavidyalaya's annual tech fest, Epitome'23, on March 25, 2023, at GSV Campus, Vadodara, India, as an intracollege event. QR Quest was one of the most anticipated events of Gati Shakti Vishwavidyalaya's tech fest, Epitome'23. It was an innovative take on the classic treasure hunt that is sure to take your breath away. The event was designed to challenge your problem-solving and analytical skills as you navigate through clues in the form of QR codes. The codes will lead you on a thrilling adventure where you'll encounter audio-visual clues that will leave you spellbound. This event was a fantastic opportunity to test your knowledge and tech-savvy skills and to put them to the test in a fun and interactive way. The maximum number of teams was 18, and each team must consist of 5 members.
 ## Suggested Rules
