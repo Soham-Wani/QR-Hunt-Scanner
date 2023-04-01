@@ -1,5 +1,5 @@
 <html>
-<!-- This is an example file to update clues and QRs in the database. Values may vary. -->
+<!-- This is an example file to update clues and QRs in the database. Follow steps from README.md and make changes accordingly.-->
 
 <head>
     <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
@@ -8,19 +8,23 @@
 
 <body>
     <script>
+        // Replace the following block with your SDK setup and configuration. Get this from Firebase Console > Project Overview > Project Settings > General > Your Apps > SDK setup and configuration > config
         const firebaseConfig = {
             apiKey: "{{APIKEY}}",
-            authDomain: "qr-hunt-scanner.firebaseapp.com",
-            databaseURL: "https://qr-hunt-scanner-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "qr-hunt-scanner",
-            storageBucket: "qr-hunt-scanner.appspot.com",
-            messagingSenderId: "1061461165959",
-            appId: "1:1061461165959:web:24ec3021ef52c03b7d3522"
+            authDomain: "usual-queries-1609431206290.firebaseapp.com",
+            databaseURL: "https://usual-queries-1609431206290-default-rtdb.firebaseio.com",
+            projectId: "usual-queries-1609431206290",
+            storageBucket: "usual-queries-1609431206290.appspot.com",
+            messagingSenderId: "697780997655",
+            appId: "1:697780997655:web:82425b31582d765648d652"
         };
+
+        // Initialise database
         firebase.initializeApp(firebaseConfig);
-        // To remove after running once start
+
+        // Set up clues
         firebase.database().ref('Clues').child('round0').set({
-            // 12 (6 Glink)
+            // 12 (6 Google maps location embed links)
             clue1: 'https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3691.6315060946986!2d73.2825278!3d22.291944400000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjLCsDE3JzMxLjAiTiA3M8KwMTYnNTcuMSJF!5e0!3m2!1sen!2sin!4v1679426288211!5m2!1sen!2sin',
             clue2: 'https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3691.891927917495!2d73.2025!3d22.2820833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjLCsDE2JzU1LjUiTiA3M8KwMTInMDkuMCJF!5e0!3m2!1sen!2sin!4v1679426362233!5m2!1sen!2sin',
             clue3: 'https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3691.6315060946986!2d73.2825278!3d22.291944400000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjLCsDE3JzMxLjAiTiA3M8KwMTYnNTcuMSJF!5e0!3m2!1sen!2sin!4v1679426288211!5m2!1sen!2sin',
