@@ -1,13 +1,16 @@
 # QR Hunt Scanner
 ## Introduction
 This repository contains a custom QR scanner developed for conducting QR hunts. 
-## Getting Started
+## Usage
 If you want to play one, find someone who is hosting one. If you want to host one, follow the steps below:
-1. To get started, fork this repository and clone to your local machine using: ```git clone https://github.com/Soham-Wani/QR-Hunt-Scanner.git```  
-Alternatively, copy "`index.html`" on your editor.
-
-## QR Quest: The Crusade
-QR Quest was a highly anticipated event at Gati Shakti Vishwavidyalaya's annual tech fest, Epitome'23, held on March 25, 2023, as an intracollege event. It was a unique twist on the traditional treasure hunt, challenging participants' problem-solving and analytical skills with QR codes that led them through a thrilling adventure of audio-visual clues. This event offered a fun and interactive opportunity to test tech-savvy skills and knowledge.
+### Steps to set up the scanner
+1. Fork this repository.
+2. Create a real-time database in Google Firebase.
+3. Add your database `APIKEY` as environment secret with the same name as you call it in the code.
+4. Make necessary changes in `index.html` like timings, rounds, teams etc. with the help of the comments in the code.
+5. From settings of the repository, enable GitHub pages. Do not make changes in the `.yml` workflow file if you don't have knowledge.
+6. Share the link of the page with the players and give them instructions and explain them the game plan.
+### Steps to set up clues 
 ## Game Plan
 - Round 1: 18 teams are given a QR code with a clue to the next QR, which they must scan and enter a passkey to reach the next clue. Clues are not displayed until the designated time.
 - Round 2: 8 teams are selected based on who scans the QR first, with 6 qualifying teams and 2 wild card entries from eliminated teams. The format is the same as Round 1, with clues leading to 8 QRs placed around the campus.
@@ -25,4 +28,7 @@ QR Quest was a highly anticipated event at Gati Shakti Vishwavidyalaya's annual 
 - All the teams participating should return to the starting point with all the QRs collected in the game, even if they are eliminated.
 - There may be dummy QRs spread over the campus, beware of those. Complaints regarding those will not be entertained.
 - **In any circumstances, decision of the organising committee will be final and should not be questioned. By playing the game, participants agree to follow and abide all the above mentioned rules.**
+## QR Quest: The Crusade
+QR Quest was a highly anticipated event at Gati Shakti Vishwavidyalaya's annual tech fest, Epitome'23, held on March 25, 2023, as an intracollege event. It was a unique twist on the traditional treasure hunt, challenging participants' problem-solving and analytical skills with QR codes that led them through a thrilling adventure of audio-visual clues. This event offered a fun and interactive opportunity to test tech-savvy skills and knowledge.
+
 Open a pull request or an issue to make changes or suggest bug fixes.
